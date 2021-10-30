@@ -8,6 +8,8 @@
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+		<AndroidLinkMode>None</AndroidLinkMode>
 
 		<!-- Display name -->
 		<ApplicationTitle>EBikeBrain</ApplicationTitle>
