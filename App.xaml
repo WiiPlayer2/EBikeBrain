@@ -22,6 +22,8 @@
                 <Setter Property="Padding" Value="14,10" />
             </Style>
 
+            <local:MainViewModel x:Key="mainViewModel" />
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
