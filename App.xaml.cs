@@ -11,7 +11,7 @@ namespace EBikeBrain
 		{
 			InitializeComponent();
 
-			MainPage = new MainPage();
-		}
+            MainPage = new MainPage();
+        }
 	}
 }

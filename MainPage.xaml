@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EBikeBrain.MainPage"
              BindingContext="{StaticResource mainViewModel}">
-    <Grid RowDefinitions="Auto,*">
-        <Button Command="{Binding}" Text="Connect"/>
+    <Grid RowSpacing="25"  RowDefinitions="Auto,Auto,*">
+        <Button Grid.Row="0"  Command="{Binding ConnectCommand}" Text="Connect"/>
+        <Button Grid.Row="1"  Command="{Binding DisconnectCommand}" Text="Disconnect" />
     </Grid>
 </ContentPage>

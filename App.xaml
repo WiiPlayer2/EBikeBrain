@@ -9,6 +9,7 @@
 
             <Color x:Key="PrimaryColor">#512bdf</Color>
             <Color x:Key="SecondaryColor">White</Color>
+            <Color x:Key="DisabledSecondaryColor">Gray</Color>
 
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="{DynamicResource PrimaryColor}" />
@@ -16,6 +17,11 @@
             </Style>
 
             <Style TargetType="Button">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False" TargetType="Button">
+                        <Setter Property="TextColor" Value="{DynamicResource DisabledSecondaryColor}" />
+                    </Trigger>
+                </Style.Triggers>
                 <Setter Property="TextColor" Value="{DynamicResource SecondaryColor}" />
                 <Setter Property="FontFamily" Value="OpenSansRegular" />
                 <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
