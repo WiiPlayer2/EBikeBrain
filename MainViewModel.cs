@@ -18,6 +18,8 @@ namespace EBikeBrain
 {
     internal class MainViewModel : INotifyPropertyChanged
     {
+        private const double WHEEL_SIZE_IN_METERS = 0.7112; // 28"
+
         private BluetoothSocket? currentSocket;
 
         private double currentRpm;
@@ -45,8 +47,11 @@ namespace EBikeBrain
             {
                 currentRpm = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentSpeed));
             }
         }
+
+        public double CurrentSpeed => CurrentRPM * WHEEL_SIZE_IN_METERS * 60.0 / 1000.0;
 
         public BikeComm.PasLevel CurrentLevel
         {
@@ -82,11 +87,19 @@ namespace EBikeBrain
                 ConnectCommand.Refresh();
                 await currentSocket.ConnectAsync();
                 bikeComm = new BikeComm(currentSocket.InputStream!, currentSocket.OutputStream!);
+                await bikeComm.SetPasLevel(BikeComm.PasLevel.PAS0);
+                await bikeComm.SetMaxWheelRpm(186); // 25km/h with 28" wheel
+                await bikeComm.SetLights(false);
                 updateLoopTask = Task.Run(UpdateLoop);
             }
             catch
             {
                 currentSocket = null;
+                if (bikeComm != null)
+                {
+                    await bikeComm.DisposeAsync();
+                    bikeComm = null;
+                }
             }
 
             ConnectCommand.Refresh();

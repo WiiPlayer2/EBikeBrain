@@ -86,7 +86,7 @@ namespace EBikeBrain
         }
 
         public Task SetLights(bool isOn)
-            => Request(1, 0x16, 0x1A, (byte) (isOn ? 0xF1 : 0xF0));
+            => Request(0, 0x16, 0x1A, (byte) (isOn ? 0xF1 : 0xF0));
 
         public async Task<byte> GetBatteryPercentage()
         {
@@ -102,6 +102,9 @@ namespace EBikeBrain
 
         public Task SetPasLevel(PasLevel level, CancellationToken cancellationToken = default)
             => Request(0, cancellationToken, WithChecksum(0x16, 0x0B, (byte) level));
+
+        public Task SetMaxWheelRpm(ushort maxRpm)
+            => Request(0, WithChecksum((byte) (maxRpm / 256), (byte) (maxRpm % 256)));
 
         private static byte[] WithChecksum(params byte[] data)
         {
