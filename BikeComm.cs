@@ -37,29 +37,39 @@ namespace EBikeBrain
 
         private readonly byte[] buffer = new byte[16];
 
+        private readonly TimeSpan timeout = TimeSpan.FromSeconds(1);
+
+        public bool IsBusy => semaphoreSlim.CurrentCount == 0;
+
         public BikeComm(Stream inputStream, Stream outputStream)
         {
             this.inputStream = inputStream;
             this.outputStream = outputStream;
         }
 
-        public async Task<byte[]> Request(int responseLength, params byte[] request)
+        public Task<byte[]> Request(int responseLength, params byte[] request)
+            => Request(responseLength, default, request);
+
+        public async Task<byte[]> Request(int responseLength, CancellationToken cancellationToken, params byte[] request)
         {
-            await semaphoreSlim.WaitAsync();
+            var timedCancellationTokenSource = new CancellationTokenSource(timeout);
+            var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(timedCancellationTokenSource.Token, cancellationToken);
 
             try
             {
-                await outputStream.WriteAsync(request, 0, request.Length);
-                await outputStream.FlushAsync();
+                await semaphoreSlim.WaitAsync(timeout, linkedCancellationTokenSource.Token);
+                await outputStream.WriteAsync(request, 0, request.Length, linkedCancellationTokenSource.Token);
+                await outputStream.FlushAsync(linkedCancellationTokenSource.Token);
                 if (responseLength == 0)
                     return Array.Empty<byte>();
 
-                var actualResponseLength = await inputStream.ReadAsync(buffer, 0, responseLength);
+                var actualResponseLength = await inputStream.ReadAsync(buffer, 0, responseLength, linkedCancellationTokenSource.Token);
                 return buffer.Take(actualResponseLength).ToArray();
             }
             finally
             {
                 semaphoreSlim.Release();
+                timedCancellationTokenSource.Dispose();
             }
         }
 
@@ -90,8 +100,8 @@ namespace EBikeBrain
             return response[0] / 2.0;
         }
 
-        public Task SetPasLevel(PasLevel level)
-            => Request(0, WithChecksum(0x16, 0x0B, (byte) level));
+        public Task SetPasLevel(PasLevel level, CancellationToken cancellationToken = default)
+            => Request(0, cancellationToken, WithChecksum(0x16, 0x0B, (byte) level));
 
         private static byte[] WithChecksum(params byte[] data)
         {

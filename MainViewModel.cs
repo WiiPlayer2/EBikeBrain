@@ -22,6 +22,8 @@ namespace EBikeBrain
 
         private double currentRpm;
 
+        private BikeComm.PasLevel currentLevel;
+
         private BikeComm? bikeComm;
 
         private CancellationTokenSource? currentCancellationTokenSource;
@@ -31,6 +33,10 @@ namespace EBikeBrain
         public ActionCommand ConnectCommand { get; }
 
         public ActionCommand DisconnectCommand { get; }
+
+        public ActionCommand IncreaseLevelCommand { get; }
+
+        public ActionCommand DecreaseLevelCommand { get; }
 
         public double CurrentRPM
         {
@@ -42,10 +48,22 @@ namespace EBikeBrain
             }
         }
 
+        public BikeComm.PasLevel CurrentLevel
+        {
+            get => currentLevel;
+            set
+            {
+                currentLevel = value;
+                OnPropertyChanged();
+            }
+        }
+
         public MainViewModel()
         {
             ConnectCommand = new ActionCommand(Connect, () => currentSocket == null);
             DisconnectCommand = new ActionCommand(Disconnect, () => currentSocket?.IsConnected ?? false);
+            IncreaseLevelCommand = new ActionCommand(IncreaseLevel, () => bikeComm is {IsBusy: false} && CurrentLevel != BikeComm.PasLevel.PAS9);
+            DecreaseLevelCommand = new ActionCommand(DecreaseLevel, () => bikeComm is {IsBusy: false} && CurrentLevel != BikeComm.PasLevel.PAS0);
         }
 
         private async Task Connect()
@@ -73,18 +91,22 @@ namespace EBikeBrain
 
             ConnectCommand.Refresh();
             DisconnectCommand.Refresh();
+            IncreaseLevelCommand.Refresh();
+            DecreaseLevelCommand.Refresh();
         }
 
         private async Task UpdateLoop()
         {
             currentCancellationTokenSource?.Dispose();
             currentCancellationTokenSource = new();
+
             while (!currentCancellationTokenSource.IsCancellationRequested)
             {
                 await Task.Delay(250);
                 if (currentCancellationTokenSource.IsCancellationRequested)
                     return;
 
+                await bikeComm!.SetPasLevel(CurrentLevel);
                 CurrentRPM = await bikeComm!.GetWheelRpm();
             }
         }
@@ -97,6 +119,7 @@ namespace EBikeBrain
             currentSocket?.Close();
             currentSocket = null;
             bikeComm = null;
+            CurrentLevel = BikeComm.PasLevel.PAS0;
 
             try
             {
@@ -106,6 +129,50 @@ namespace EBikeBrain
 
             ConnectCommand.Refresh();
             DisconnectCommand.Refresh();
+            IncreaseLevelCommand.Refresh();
+            DecreaseLevelCommand.Refresh();
+        }
+
+        private Task IncreaseLevel()
+            => SetLevel(CurrentLevel switch
+            {
+                BikeComm.PasLevel.PAS0 => BikeComm.PasLevel.PAS1,
+                BikeComm.PasLevel.PAS1 => BikeComm.PasLevel.PAS2,
+                BikeComm.PasLevel.PAS2 => BikeComm.PasLevel.PAS3,
+                BikeComm.PasLevel.PAS3 => BikeComm.PasLevel.PAS4,
+                BikeComm.PasLevel.PAS4 => BikeComm.PasLevel.PAS5,
+                BikeComm.PasLevel.PAS5 => BikeComm.PasLevel.PAS6,
+                BikeComm.PasLevel.PAS6 => BikeComm.PasLevel.PAS7,
+                BikeComm.PasLevel.PAS7 => BikeComm.PasLevel.PAS8,
+                BikeComm.PasLevel.PAS8 => BikeComm.PasLevel.PAS9,
+            });
+
+        private Task DecreaseLevel()
+            => SetLevel(CurrentLevel switch
+            {
+                BikeComm.PasLevel.PAS1 => BikeComm.PasLevel.PAS0,
+                BikeComm.PasLevel.PAS2 => BikeComm.PasLevel.PAS1,
+                BikeComm.PasLevel.PAS3 => BikeComm.PasLevel.PAS2,
+                BikeComm.PasLevel.PAS4 => BikeComm.PasLevel.PAS3,
+                BikeComm.PasLevel.PAS5 => BikeComm.PasLevel.PAS4,
+                BikeComm.PasLevel.PAS6 => BikeComm.PasLevel.PAS5,
+                BikeComm.PasLevel.PAS7 => BikeComm.PasLevel.PAS6,
+                BikeComm.PasLevel.PAS8 => BikeComm.PasLevel.PAS7,
+                BikeComm.PasLevel.PAS9 => BikeComm.PasLevel.PAS8,
+            });
+
+        private async Task SetLevel(BikeComm.PasLevel level)
+        {
+            try
+            {
+                await bikeComm!.SetPasLevel(level);
+                CurrentLevel = level;
+            }
+            finally
+            {
+                IncreaseLevelCommand.Refresh();
+                DecreaseLevelCommand.Refresh();
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
