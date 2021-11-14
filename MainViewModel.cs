@@ -13,6 +13,7 @@ using System.Windows.Input;
 using EBikeBrain.Annotations;
 using Java.Util;
 using Microsoft.Maui;
+using Microsoft.Maui.Essentials;
 
 namespace EBikeBrain
 {
@@ -119,8 +120,14 @@ namespace EBikeBrain
                 if (currentCancellationTokenSource.IsCancellationRequested)
                     return;
 
-                await bikeComm!.SetPasLevel(CurrentLevel);
-                CurrentRPM = await bikeComm!.GetWheelRpm();
+                try
+                { 
+                    await bikeComm!.SetPasLevel(CurrentLevel);
+                    CurrentRPM = await bikeComm!.GetWheelRpm();
+                }
+                catch
+                {
+                }
             }
         }
 
