@@ -166,11 +166,19 @@ namespace EBikeBrain
         {
             currentCancellationTokenSource?.Cancel();
 
+            CurrentLevel = BikeComm.PasLevel.PAS0;
+            try
+            {
+                await bikeComm!.SetPasLevel(BikeComm.PasLevel.PAS0);
+            }
+            catch
+            {
+            }
+
             await bikeComm!.DisposeAsync();
             currentSocket?.Close();
             currentSocket = null;
             bikeComm = null;
-            CurrentLevel = BikeComm.PasLevel.PAS0;
 
             try
             {
