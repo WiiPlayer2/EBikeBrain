@@ -1,16 +1,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="EBikeBrain.MainPage"
              BindingContext="{StaticResource mainViewModel}">
-    <Grid RowSpacing="8"  RowDefinitions="Auto,Auto,Auto,Auto,*">
-        <Button Grid.Row="0"  Command="{Binding ConnectCommand}" Text="Connect"/>
-        <Button Grid.Row="1"  Command="{Binding DisconnectCommand}" Text="Disconnect" />
-        <Label Grid.Row="2" HorizontalOptions="Center"  Text="km/h" FontSize="30" />
-        <Label Grid.Row="3" HorizontalOptions="Center"  Text="{Binding CurrentSpeed, StringFormat='{0:F1}'}" FontSize="120" />
-        <Grid Grid.Row="4"  RowSpacing="8" ColumnSpacing="8"  ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" HorizontalOptions="Center">
+    <StackLayout Spacing="8">
+        <Button Command="{Binding ConnectCommand}" Text="Connect"/>
+        <Button Command="{Binding DisconnectCommand}" Text="Disconnect" />
+        <Label HorizontalOptions="Center"  Text="km/h" FontSize="30" />
+        <Label HorizontalOptions="Center"  Text="{Binding CurrentSpeed, StringFormat='{0:F1}'}" FontSize="120" />
+        <Grid ColumnSpacing="8" ColumnDefinitions="*,*,*">
+            <Grid.Resources>
+                <sys:Double x:Key="TitleFontSize">12</sys:Double>
+                <sys:Double x:Key="ValueFontSize">25</sys:Double>
+            </Grid.Resources>
+            <StackLayout Grid.Column="0"  Spacing="8">
+                <Label HorizontalOptions="Center" Text="RPM" FontSize="{StaticResource TitleFontSize}" />
+                <Label HorizontalOptions="Center" Text="{Binding CurrentRPM, StringFormat='{0:F1}'}" FontSize="{StaticResource ValueFontSize}" />
+            </StackLayout>
+            <StackLayout Grid.Column="1" Spacing="8">
+                <Label HorizontalOptions="Center" Text="Battery [%]" FontSize="{StaticResource TitleFontSize}" />
+                <Label HorizontalOptions="Center" Text="{Binding CurrentBatteryPercentage, StringFormat='{0:0}'}" FontSize="{StaticResource ValueFontSize}" />
+            </StackLayout>
+            <StackLayout Grid.Column="2" Spacing="8">
+                <Label HorizontalOptions="Center" Text="Power [W]" FontSize="{StaticResource TitleFontSize}" />
+                <Label HorizontalOptions="Center" Text="{Binding CurrentPower, StringFormat='{0:0}'}" FontSize="{StaticResource ValueFontSize}" />
+            </StackLayout>
+        </Grid>
+        <Grid RowSpacing="8" ColumnSpacing="8"  ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" HorizontalOptions="Center">
             <Label Grid.RowSpan="2" Text="{Binding CurrentLevel}" FontSize="100" VerticalOptions="Center" />
             <Button Grid.Row="0" Grid.Column="1" Text="+" FontSize="80" Command="{Binding IncreaseLevelCommand}" />
             <Button Grid.Row="1" Grid.Column="1" Text="-" FontSize="80" Command="{Binding DecreaseLevelCommand}" />
         </Grid>
-    </Grid>
+    </StackLayout>
 </ContentPage>

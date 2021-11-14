@@ -21,6 +21,8 @@ namespace EBikeBrain
     {
         private const double WHEEL_SIZE_IN_METERS = 0.7112; // 28"
 
+        private const double BATTERY_VOLTAGE = 36;
+
         private BluetoothSocket? currentSocket;
 
         private double currentRpm;
@@ -32,6 +34,10 @@ namespace EBikeBrain
         private CancellationTokenSource? currentCancellationTokenSource;
 
         private Task? updateLoopTask;
+
+        private double currentBatteryPercentage;
+
+        private double currentAmps;
 
         public ActionCommand ConnectCommand { get; }
 
@@ -52,7 +58,30 @@ namespace EBikeBrain
             }
         }
 
-        public double CurrentSpeed => CurrentRPM * WHEEL_SIZE_IN_METERS * 60.0 / 1000.0;
+        public double CurrentSpeed => 3600.0 / 1000.0 * WHEEL_SIZE_IN_METERS * Math.PI / 60.0 * CurrentRPM;
+
+        public double CurrentBatteryPercentage
+        {
+            get => currentBatteryPercentage;
+            set
+            {
+                currentBatteryPercentage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double CurrentAmps
+        {
+            get => currentAmps;
+            set
+            {
+                currentAmps = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentPower));
+            }
+        }
+
+        public double CurrentPower => BATTERY_VOLTAGE * CurrentAmps;
 
         public BikeComm.PasLevel CurrentLevel
         {
@@ -124,6 +153,8 @@ namespace EBikeBrain
                 { 
                     await bikeComm!.SetPasLevel(CurrentLevel);
                     CurrentRPM = await bikeComm!.GetWheelRpm();
+                    CurrentBatteryPercentage = await bikeComm!.GetBatteryPercentage();
+                    CurrentAmps = await bikeComm!.GetAmps();
                 }
                 catch
                 {
