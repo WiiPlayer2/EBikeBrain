@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Java.Lang;
 
 namespace EBikeBrain
 {
@@ -73,6 +74,21 @@ namespace EBikeBrain
             }
         }
 
+        public async Task FlushBuffer()
+        {
+            await semaphoreSlim.WaitAsync();
+            try
+            {
+                await outputStream.FlushAsync();
+                var buffer = new byte[1024];
+                await outputStream.ReadAsync(buffer, 0, buffer.Length);
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
+        }
+
         public async Task<ErrorCode> GetErrorCode()
         {
             var response = await Request(1, 0x11, 0x08);
@@ -82,6 +98,7 @@ namespace EBikeBrain
         public async Task<ushort> GetWheelRpm()
         {
             var response = await Request(3, 0x11, 0x20);
+            VerifyChecksum(response);
             return (ushort)((response[0] * 256u) + response[1]);
         }
 
@@ -91,12 +108,14 @@ namespace EBikeBrain
         public async Task<byte> GetBatteryPercentage()
         {
             var response = await Request(2, 0x11, 0x11);
+            VerifyChecksum(response);
             return response[0];
         }
 
         public async Task<double> GetAmps()
         {
             var response = await Request(2, 0x11, 0x0A);
+            VerifyChecksum(response);
             return response[0] / 2.0;
         }
 
@@ -112,6 +131,15 @@ namespace EBikeBrain
             foreach (var b in data)
                 checksum += b;
             return data.Concat(new[] {checksum}).ToArray();
+        }
+
+        private static void VerifyChecksum(byte[] data)
+        {
+            byte checksum = 0;
+            for (var i = 0; i < data.Length - 1; i++)
+                checksum += data[i];
+            if (checksum != data[^1])
+                throw new System.Exception("Checksum invalid.");
         }
 
         public async ValueTask DisposeAsync()

@@ -145,7 +145,7 @@ namespace EBikeBrain
 
             while (!currentCancellationTokenSource.IsCancellationRequested)
             {
-                await Task.Delay(250);
+                await Task.Delay(500);
                 if (currentCancellationTokenSource.IsCancellationRequested)
                     return;
 
@@ -158,6 +158,7 @@ namespace EBikeBrain
                 }
                 catch
                 {
+                    await bikeComm!.FlushBuffer();
                 }
             }
         }
