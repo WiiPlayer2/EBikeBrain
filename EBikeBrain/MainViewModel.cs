@@ -47,6 +47,8 @@ namespace EBikeBrain
 
         public ActionCommand DecreaseLevelCommand { get; }
 
+        public ActionCommand FlushBufferCommand { get; }
+
         public double CurrentRPM
         {
             get => currentRpm;
@@ -97,8 +99,20 @@ namespace EBikeBrain
         {
             ConnectCommand = new ActionCommand(Connect, () => currentSocket == null);
             DisconnectCommand = new ActionCommand(Disconnect, () => currentSocket?.IsConnected ?? false);
+            FlushBufferCommand = new ActionCommand(FlushBuffer, () => bikeComm != null);
             IncreaseLevelCommand = new ActionCommand(IncreaseLevel, () => bikeComm is {IsBusy: false} && CurrentLevel != BikeComm.PasLevel.PAS9);
             DecreaseLevelCommand = new ActionCommand(DecreaseLevel, () => bikeComm is {IsBusy: false} && CurrentLevel != BikeComm.PasLevel.PAS0);
+        }
+
+        private async Task FlushBuffer()
+        {
+            try
+            {
+                await bikeComm!.FlushBuffer();
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private async Task Connect()
@@ -122,8 +136,10 @@ namespace EBikeBrain
                 await bikeComm.SetLights(false);
                 updateLoopTask = Task.Run(UpdateLoop);
             }
-            catch
+            catch(Exception ex)
             {
+                currentSocket.Close();
+                currentSocket.Dispose();
                 currentSocket = null;
                 if (bikeComm != null)
                 {
@@ -136,6 +152,7 @@ namespace EBikeBrain
             DisconnectCommand.Refresh();
             IncreaseLevelCommand.Refresh();
             DecreaseLevelCommand.Refresh();
+            FlushBufferCommand.Refresh();
         }
 
         private async Task UpdateLoop()
@@ -191,6 +208,7 @@ namespace EBikeBrain
             DisconnectCommand.Refresh();
             IncreaseLevelCommand.Refresh();
             DecreaseLevelCommand.Refresh();
+            FlushBufferCommand.Refresh();
         }
 
         private Task IncreaseLevel()

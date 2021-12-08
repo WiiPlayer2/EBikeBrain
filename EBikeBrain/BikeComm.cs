@@ -138,8 +138,8 @@ namespace EBikeBrain
             byte checksum = 0;
             for (var i = 0; i < data.Length - 1; i++)
                 checksum += data[i];
-            if (checksum != data[^1])
-                throw new System.Exception("Checksum invalid.");
+            //if (checksum != data[^1])
+            //    throw new System.Exception("Checksum invalid.");
         }
 
         public async ValueTask DisposeAsync()

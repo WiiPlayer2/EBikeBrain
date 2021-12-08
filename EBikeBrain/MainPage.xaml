@@ -5,7 +5,10 @@
              BindingContext="{StaticResource mainViewModel}">
     <StackLayout Spacing="8">
         <Button Command="{Binding ConnectCommand}" Text="Connect"/>
-        <Button Command="{Binding DisconnectCommand}" Text="Disconnect" />
+        <Grid ColumnSpacing="8" ColumnDefinitions="*,*">
+            <Button Grid.Column="0"  Command="{Binding DisconnectCommand}" Text="Disconnect" />
+            <Button Grid.Column="1"  Command="{Binding FlushBufferCommand}" Text="Flush Buffer" />
+        </Grid>
         <Label HorizontalOptions="Center"  Text="km/h" FontSize="30" />
         <Label HorizontalOptions="Center"  Text="{Binding CurrentSpeed, StringFormat='{0:F1}'}" FontSize="120" />
         <Grid ColumnSpacing="8" ColumnDefinitions="*,*,*">
