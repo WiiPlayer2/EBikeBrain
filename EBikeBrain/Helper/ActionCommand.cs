@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,24 @@ namespace EBikeBrain.Helper
                 return;
 
             execute(parameter);
+        }
+
+        public void Add(params INotifyPropertyChanged[] eventSources)
+        {
+            foreach (var eventSource in eventSources)
+            {
+                eventSource.PropertyChanged += EventSourceOnPropertyChanged;
+            }
+        }
+
+        private void EventSourceOnPropertyChanged(object? sender, PropertyChangedEventArgs e) => Refresh();
+
+        public void Remove(params INotifyPropertyChanged[] eventSources)
+        {
+            foreach (var eventSource in eventSources)
+            {
+                eventSource.PropertyChanged -= EventSourceOnPropertyChanged;
+            }
         }
 
         public void Refresh(object? parameter = default)
