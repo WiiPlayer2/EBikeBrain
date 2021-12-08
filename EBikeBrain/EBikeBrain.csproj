@@ -58,6 +58,18 @@
 		<PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.0.26-experimental1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Protocols\Bafang\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Fody" Version="6.6.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="ReactiveUI.Fody" Version="17.1.6" />
+	</ItemGroup>
+
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
 		<OutputType>WinExe</OutputType>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
