@@ -104,6 +104,15 @@ namespace EBikeBrain
             DecreaseLevelCommand = new ActionCommand(DecreaseLevel, () => bikeComm is {IsBusy: false} && CurrentLevel != BikeComm.PasLevel.PAS0);
         }
 
+        private void RefreshCommands()
+        {
+            ConnectCommand.Refresh();
+            DisconnectCommand.Refresh();
+            FlushBufferCommand.Refresh();
+            IncreaseLevelCommand.Refresh();
+            DecreaseLevelCommand.Refresh();
+        }
+
         private async Task FlushBuffer()
         {
             try
@@ -128,9 +137,13 @@ namespace EBikeBrain
 
             try
             {
-                ConnectCommand.Refresh();
+                RefreshCommands();
                 await currentSocket.ConnectAsync();
                 bikeComm = new BikeComm(currentSocket.InputStream!, currentSocket.OutputStream!);
+
+                IncreaseLevelCommand.Add(bikeComm);
+                DecreaseLevelCommand.Add(bikeComm);
+
                 await bikeComm.SetPasLevel(BikeComm.PasLevel.PAS0);
                 await bikeComm.SetMaxWheelRpm(186); // 25km/h with 28" wheel
                 await bikeComm.SetLights(false);
@@ -148,11 +161,7 @@ namespace EBikeBrain
                 }
             }
 
-            ConnectCommand.Refresh();
-            DisconnectCommand.Refresh();
-            IncreaseLevelCommand.Refresh();
-            DecreaseLevelCommand.Refresh();
-            FlushBufferCommand.Refresh();
+            RefreshCommands();
         }
 
         private async Task UpdateLoop()
@@ -194,6 +203,10 @@ namespace EBikeBrain
             }
 
             await bikeComm!.DisposeAsync();
+
+            IncreaseLevelCommand.Remove(bikeComm);
+            DecreaseLevelCommand.Remove(bikeComm);
+
             currentSocket?.Close();
             currentSocket = null;
             bikeComm = null;
@@ -204,11 +217,7 @@ namespace EBikeBrain
             }
             catch { }
 
-            ConnectCommand.Refresh();
-            DisconnectCommand.Refresh();
-            IncreaseLevelCommand.Refresh();
-            DecreaseLevelCommand.Refresh();
-            FlushBufferCommand.Refresh();
+            RefreshCommands();
         }
 
         private Task IncreaseLevel()
@@ -248,8 +257,7 @@ namespace EBikeBrain
             }
             finally
             {
-                IncreaseLevelCommand.Refresh();
-                DecreaseLevelCommand.Refresh();
+                RefreshCommands();
             }
         }
 

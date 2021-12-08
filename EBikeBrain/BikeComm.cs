@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using EBikeBrain.Annotations;
 using Java.Lang;
 
 namespace EBikeBrain
 {
-    internal class BikeComm : IAsyncDisposable
+    internal class BikeComm : IAsyncDisposable, INotifyPropertyChanged
     {
         public enum ErrorCode : byte
         {
@@ -59,6 +62,7 @@ namespace EBikeBrain
             try
             {
                 await semaphoreSlim.WaitAsync(timeout, linkedCancellationTokenSource.Token);
+                OnPropertyChanged(nameof(IsBusy));
                 await outputStream.WriteAsync(request, 0, request.Length, linkedCancellationTokenSource.Token);
                 await outputStream.FlushAsync(linkedCancellationTokenSource.Token);
                 if (responseLength == 0)
@@ -70,6 +74,7 @@ namespace EBikeBrain
             finally
             {
                 semaphoreSlim.Release();
+                OnPropertyChanged(nameof(IsBusy));
                 timedCancellationTokenSource.Dispose();
             }
         }
@@ -147,6 +152,14 @@ namespace EBikeBrain
             semaphoreSlim.Dispose();
             await inputStream.DisposeAsync();
             await outputStream.DisposeAsync();
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
