@@ -1,9 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LegacyEBikeBrain", "LegacyEBikeBrain\LegacyEBikeBrain.csproj", "{A6686361-3360-4BCC-94C4-0D4E067F7BE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp", "EBikeBrainApp\EBikeBrainApp.csproj", "{5F6B5EA4-A356-4A49-9700-CB87CA0C3326}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +18,12 @@ Global
 		{A6686361-3360-4BCC-94C4-0D4E067F7BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6686361-3360-4BCC-94C4-0D4E067F7BE1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6686361-3360-4BCC-94C4-0D4E067F7BE1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5F6B5EA4-A356-4A49-9700-CB87CA0C3326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6B5EA4-A356-4A49-9700-CB87CA0C3326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F6B5EA4-A356-4A49-9700-CB87CA0C3326}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5F6B5EA4-A356-4A49-9700-CB87CA0C3326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F6B5EA4-A356-4A49-9700-CB87CA0C3326}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F6B5EA4-A356-4A49-9700-CB87CA0C3326}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
