@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="LanguageExt.Core" Version="4.4.8"/>
+        <PackageReference Include="UnitsNet" Version="5.50.0"/>
+    </ItemGroup>
+
 </Project>
