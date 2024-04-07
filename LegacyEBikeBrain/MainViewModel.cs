@@ -13,7 +13,6 @@ using System.Windows.Input;
 using EBikeBrain.Annotations;
 using Java.Util;
 using Microsoft.Maui;
-using Microsoft.Maui.Essentials;
 
 namespace EBikeBrain
 {
