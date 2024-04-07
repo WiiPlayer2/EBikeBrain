@@ -13,6 +13,7 @@ using System.Windows.Input;
 using EBikeBrain.Annotations;
 using Java.Util;
 using Microsoft.Maui;
+using Microsoft.Maui.ApplicationModel;
 
 namespace EBikeBrain
 {
@@ -125,9 +126,15 @@ namespace EBikeBrain
 
         private async Task Connect()
         {
+            var bluetoothPermission = new Permissions.Bluetooth();
+            if (await bluetoothPermission.CheckStatusAsync() != PermissionStatus.Granted && await bluetoothPermission.RequestAsync() != PermissionStatus.Granted)
+            {
+                throw new Exception("Permission not granted");
+            }
+
             var bluetoothManager = (BluetoothManager?) MauiApplication.Current.GetSystemService(MauiApplication.BluetoothService);
             var adapter = bluetoothManager?.Adapter;
-            var device = adapter?.GetRemoteDevice("C8:C9:A3:D2:E1:CE");
+            var device = adapter?.GetRemoteDevice("94:B9:7E:D4:28:E2");
             var bluetoothServiceClass = UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");
             currentSocket = device?.CreateRfcommSocketToServiceRecord(bluetoothServiceClass);
 
