@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="LanguageExt.Core" Version="4.4.8"/>
         <PackageReference Include="UnitsNet" Version="5.50.0"/>
+        <PackageReference Include="Vogen" Version="3.0.24"/>
     </ItemGroup>
 
 </Project>
