@@ -1,13 +1,13 @@
 using System;
-using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using EBikeBrainApp.Avalonia.XPlat.ViewModels;
 using EBikeBrainApp.Avalonia.XPlat.Views;
+using AvaloniaApp = Avalonia.Application;
 
 namespace EBikeBrainApp.Avalonia.XPlat;
 
-public class App : Application
+public class App : AvaloniaApp
 {
     public override void Initialize()
     {
