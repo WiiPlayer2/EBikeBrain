@@ -16,10 +16,20 @@ public class BikeService<RT> where RT : struct, HasCancel<RT>
         Speed = bikeMotorService.RotationalSpeed
             .Select(x => x.Map(x => x.ToLinearSpeed(wheelDiameter)));
 
+        CanDecreasePasLevel = lastPasLevel
+            .Select(x => x.CanDecrease());
+
+        CanIncreasePasLevel = lastPasLevel
+            .Select(x => x.CanIncrease());
+
         bikeMotorService.PasLevel
             .SelectMany(x => x)
             .Subscribe(lastPasLevel);
     }
+
+    public IObservable<bool> CanDecreasePasLevel { get; }
+
+    public IObservable<bool> CanIncreasePasLevel { get; }
 
     public BikeMotorService<RT> Motor { get; }
 
