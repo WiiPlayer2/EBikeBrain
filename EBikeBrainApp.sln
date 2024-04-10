@@ -30,6 +30,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MAUI", "MAUI", "{C58EE63B-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{0465FC1E-4CE5-4C09-B0AE-EF5C0AC9C54D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp.DependencyInjection", "EBikeBrainApp.DependencyInjection\EBikeBrainApp.DependencyInjection.csproj", "{FBB3AC6B-B446-43C3-8EFB-0246153466C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementations", "Implementations", "{3973967D-D61A-413C-8BDB-1502C81004BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp.Implementations.Demo", "EBikeBrainApp.Implementations.Demo\EBikeBrainApp.Implementations.Demo.csproj", "{40652D55-FBB3-4783-A94C-274D0B0EDC0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp.Application.Abstractions", "EBikeBrainApp.Application.Abstractions\EBikeBrainApp.Application.Abstractions.csproj", "{8F345AD4-9CE0-4AB1-B326-121877030386}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +88,18 @@ Global
 		{1A6A535B-2354-4261-8F3C-384AA079C9EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A6A535B-2354-4261-8F3C-384AA079C9EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A6A535B-2354-4261-8F3C-384AA079C9EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB3AC6B-B446-43C3-8EFB-0246153466C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB3AC6B-B446-43C3-8EFB-0246153466C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB3AC6B-B446-43C3-8EFB-0246153466C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB3AC6B-B446-43C3-8EFB-0246153466C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40652D55-FBB3-4783-A94C-274D0B0EDC0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40652D55-FBB3-4783-A94C-274D0B0EDC0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40652D55-FBB3-4783-A94C-274D0B0EDC0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40652D55-FBB3-4783-A94C-274D0B0EDC0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F345AD4-9CE0-4AB1-B326-121877030386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F345AD4-9CE0-4AB1-B326-121877030386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F345AD4-9CE0-4AB1-B326-121877030386}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F345AD4-9CE0-4AB1-B326-121877030386}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,5 +117,7 @@ Global
 		{2E6A019A-F42A-4B31-995B-5058D772B014} = {93F46D8D-D7F7-46E9-AF91-4739B364243F}
 		{5F6B5EA4-A356-4A49-9700-CB87CA0C3326} = {C58EE63B-AE29-4DEF-8662-4C6DD281C181}
 		{A6686361-3360-4BCC-94C4-0D4E067F7BE1} = {0465FC1E-4CE5-4C09-B0AE-EF5C0AC9C54D}
+		{FBB3AC6B-B446-43C3-8EFB-0246153466C6} = {38B3E1D8-F8FA-4268-8C79-DA8BB20BF001}
+		{40652D55-FBB3-4783-A94C-274D0B0EDC0E} = {3973967D-D61A-413C-8BDB-1502C81004BA}
 	EndGlobalSection
 EndGlobal

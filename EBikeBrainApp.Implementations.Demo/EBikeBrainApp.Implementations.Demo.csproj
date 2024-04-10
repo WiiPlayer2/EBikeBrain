@@ -8,11 +8,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\EBikeBrainApp.Application.Abstractions\EBikeBrainApp.Application.Abstractions.csproj"/>
-      <ProjectReference Include="..\EBikeBrainApp.Domain\EBikeBrainApp.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="System.Reactive" Version="6.0.0"/>
     </ItemGroup>
 
 </Project>

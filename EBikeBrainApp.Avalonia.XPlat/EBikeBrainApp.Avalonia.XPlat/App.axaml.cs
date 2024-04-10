@@ -3,6 +3,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using EBikeBrainApp.Avalonia.XPlat.ViewModels;
 using EBikeBrainApp.Avalonia.XPlat.Views;
+using EBikeBrainApp.DependencyInjection;
+using LanguageExt.Sys.Live;
+using Microsoft.Extensions.DependencyInjection;
 using AvaloniaApp = Avalonia.Application;
 
 namespace EBikeBrainApp.Avalonia.XPlat;
@@ -16,17 +19,36 @@ public class App : AvaloniaApp
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainViewModel(),
-            };
-        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-            singleViewPlatform.MainView = new MainView
-            {
-                DataContext = new MainViewModel(),
-            };
+        var serviceProvider = BuildServiceProvider();
+        var mainViewModel = serviceProvider.GetRequiredService<MainViewModel>();
+
+        switch (ApplicationLifetime)
+        {
+            case IClassicDesktopStyleApplicationLifetime desktop:
+                desktop.MainWindow = new MainWindow
+                {
+                    DataContext = mainViewModel,
+                };
+                break;
+
+            case ISingleViewApplicationLifetime singleViewPlatform:
+                singleViewPlatform.MainView = new MainView
+                {
+                    DataContext = mainViewModel,
+                };
+                break;
+        }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static IServiceProvider BuildServiceProvider()
+    {
+        var services = new ServiceCollection();
+
+        services.AddAvalonia();
+        services.AddEBikeBrainApp<Runtime>();
+
+        return services.BuildServiceProvider();
     }
 }
