@@ -14,10 +14,11 @@
     </Design.DataContext>
 
     <StackPanel Spacing="8">
-        <Button Content="Connect" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+        <Button Content="Connect" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                Command="{Binding ConnectCommand}" />
         <Button Content="Disconnect" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
         <Label HorizontalAlignment="Center" Content="km/h" FontSize="30" />
-        <Label HorizontalAlignment="Center" Content="--,-" FontSize="120" />
+        <Label HorizontalAlignment="Center" Content="{Binding Speed.Value}" FontSize="120" />
         <Grid ColumnDefinitions="*,*,*">
             <Grid.Resources>
                 <sys:Double x:Key="TitleFontSize">12</sys:Double>

@@ -24,5 +24,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\EBikeBrainApp.DependencyInjection\EBikeBrainApp.DependencyInjection.csproj"/>
+        <ProjectReference Include="..\..\EBikeBrainApp.Implementations.Demo\EBikeBrainApp.Implementations.Demo.csproj"/>
     </ItemGroup>
 </Project>

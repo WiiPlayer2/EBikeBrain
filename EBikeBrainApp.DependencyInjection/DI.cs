@@ -10,5 +10,6 @@ public static class DI
         where RT : struct, HasCancel<RT>
     {
         services.AddSingleton<DisplayService<RT>>();
+        services.AddSingleton<ConnectionService<RT>>();
     }
 }

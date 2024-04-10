@@ -1,18 +1,34 @@
+using System.Reactive.Linq;
 using LanguageExt.Effects.Traits;
 
 namespace EBikeBrainApp.Application;
 
-public class DisplayService<RT> where RT : struct, HasCancel<RT>
+public class DisplayService<RT>(
+    ConnectionService<RT> connectionService
+)
+    where RT : struct, HasCancel<RT>
 {
-    public IObservable<Option<Aff<RT, Unit>>> ConnectBikeCommand { get; }
+    private readonly IObservable<PasService<RT>> pasService = connectionService.BikeMotorConnection
+        .Select(x => new PasService<RT>(x));
+
+    private readonly IObservable<SpeedService<RT>> speedService = connectionService.BikeMotorConnection
+        .Select(x => new SpeedService<RT>(x, WheelDiameter.From(Length.FromInches(28))));
+
+    public IObservable<bool> CanConnectBike => connectionService.CanConnect;
 
     public IObservable<Option<Aff<RT, Unit>>> DecreasePasLevelCommand { get; }
 
-    public IObservable<Option<Aff<RT, Unit>>> DisconnectBikeCommand { get; }
-
     public IObservable<Option<Aff<RT, Unit>>> IncreasePasLevelCommand { get; }
 
-    public IObservable<Fin<PasLevel>> PasLevel { get; }
+    public IObservable<Option<PasLevel>> PasLevel => pasService
+        .Select(x => x.Current.Select(x => x.ToOption()))
+        .Switch();
 
-    public IObservable<Fin<Speed>> Speed { get; }
+    public IObservable<Option<Speed>> Speed => speedService
+        .Select(x => x.Speed.Select(x => x.ToOption()))
+        .Switch();
+
+    public void Connect() => connectionService.BikeMotorConnection.Connect();
+
+    public void Disconnect() => throw new NotImplementedException();
 }

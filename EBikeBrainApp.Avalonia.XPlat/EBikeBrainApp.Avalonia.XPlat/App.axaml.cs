@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using EBikeBrainApp.Avalonia.XPlat.ViewModels;
 using EBikeBrainApp.Avalonia.XPlat.Views;
 using EBikeBrainApp.DependencyInjection;
+using EBikeBrainApp.Implementations.Demo;
 using LanguageExt.Sys.Live;
 using Microsoft.Extensions.DependencyInjection;
 using AvaloniaApp = Avalonia.Application;
@@ -47,6 +48,7 @@ public class App : AvaloniaApp
         var services = new ServiceCollection();
 
         services.AddAvalonia();
+        services.AddDemoImplementations();
         services.AddEBikeBrainApp<Runtime>();
 
         return services.BuildServiceProvider();
