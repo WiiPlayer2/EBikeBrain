@@ -7,6 +7,6 @@ public static class DI
 {
     public static void AddDemoImplementations(this IServiceCollection services)
     {
-        services.AddSingleton<IBikeMotor, DemoBikeMotor>();
+        services.AddSingleton<IBikeMotorConnector, DemoBikeMotorConnector>();
     }
 }
