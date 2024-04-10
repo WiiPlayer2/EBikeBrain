@@ -16,7 +16,8 @@
     <StackPanel Spacing="8">
         <Button Content="Connect" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                 Command="{Binding ConnectCommand}" />
-        <Button Content="Disconnect" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+        <Button Content="Disconnect" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                Command="{Binding DisconnectCommand}" />
         <Label HorizontalAlignment="Center" Content="km/h" FontSize="30" />
         <Label HorizontalAlignment="Center" Content="{Binding Speed.Value}" FontSize="120" />
         <Grid ColumnDefinitions="*,*,*">

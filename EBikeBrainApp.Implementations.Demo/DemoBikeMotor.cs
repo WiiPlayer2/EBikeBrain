@@ -17,7 +17,7 @@ public class DemoBikeMotor : IBikeMotor, IDisposable
     {
         while (!token.IsCancellationRequested)
         {
-            observer.OnNext(UnitsNet.RotationalSpeed.FromRevolutionsPerMinute(Random.Shared.Next(int.MaxValue)));
+            observer.OnNext(UnitsNet.RotationalSpeed.FromRevolutionsPerMinute(Random.Shared.Next(1000)));
             await Task.Delay(1.Seconds(), token);
         }
     });

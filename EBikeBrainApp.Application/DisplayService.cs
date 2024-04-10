@@ -16,6 +16,8 @@ public class DisplayService<RT>(
 
     public IObservable<bool> CanConnectBike => connectionService.CanConnect;
 
+    public IObservable<bool> CanDisconnectBike => connectionService.CanDisconnect;
+
     public IObservable<Option<Aff<RT, Unit>>> DecreasePasLevelCommand { get; }
 
     public IObservable<Option<Aff<RT, Unit>>> IncreasePasLevelCommand { get; }

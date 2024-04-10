@@ -18,12 +18,15 @@ public class MainViewModel : ViewModelBase, IDisposable
             .ToReadOnlyReactiveProperty();
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
+        DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);
 
         subscriptions = new CompositeDisposable(
             ConnectCommand.Subscribe(_ => displayService.Connect()));
     }
 
     public ReactiveCommand<object?> ConnectCommand { get; }
+
+    public ReactiveCommand<object?> DisconnectCommand { get; }
 
     public ReadOnlyReactiveProperty<string> Speed { get; }
 
