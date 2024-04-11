@@ -11,5 +11,6 @@ public static class DI
     {
         services.AddSingleton<DisplayService<RT>>();
         services.AddSingleton<ConnectionService<RT>>();
+        services.AddSingleton<ConfigurationService>();
     }
 }

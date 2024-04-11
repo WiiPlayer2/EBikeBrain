@@ -9,6 +9,7 @@
     <ItemGroup>
         <ProjectReference Include="..\EBikeBrainApp.Application.Abstractions\EBikeBrainApp.Application.Abstractions.csproj"/>
       <ProjectReference Include="..\EBikeBrainApp.Domain\EBikeBrainApp.Domain.csproj" />
+        <ProjectReference Include="..\EBikeBrainApp.Utils\EBikeBrainApp.Utils.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

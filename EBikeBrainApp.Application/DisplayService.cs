@@ -4,7 +4,8 @@ using LanguageExt.Effects.Traits;
 namespace EBikeBrainApp.Application;
 
 public class DisplayService<RT>(
-    ConnectionService<RT> connectionService
+    ConnectionService<RT> connectionService,
+    ConfigurationService configurationService
 )
     where RT : struct, HasCancel<RT>
 {
@@ -12,7 +13,7 @@ public class DisplayService<RT>(
         .Select(x => new PasService<RT>(x));
 
     private readonly IObservable<SpeedService<RT>> speedService = connectionService.BikeMotorConnection
-        .Select(x => new SpeedService<RT>(x, WheelDiameter.From(Length.FromInches(28))));
+        .Select(x => new SpeedService<RT>(x, configurationService));
 
     public IObservable<bool> CanConnectBike => connectionService.CanConnect;
 

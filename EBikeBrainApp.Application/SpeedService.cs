@@ -5,9 +5,10 @@ namespace EBikeBrainApp.Application;
 
 public class SpeedService<RT>(
     BikeMotorService<RT> bikeMotorService,
-    WheelDiameter wheelDiameter)
+    ConfigurationService configurationService)
     where RT : struct, HasCancel<RT>
 {
     public IObservable<Fin<Speed>> Speed { get; } = bikeMotorService.RotationalSpeed
-        .Select(x => x.Map(x => x.ToLinearSpeed(wheelDiameter.Value)));
+        .CombineLatest(configurationService.Bike.Select(x => x.WheelDiameter))
+        .Select(t => t.First.Map(x => x.ToLinearSpeed(t.Second.Value)));
 }
