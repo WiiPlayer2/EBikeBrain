@@ -3,8 +3,29 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:EBikeBrainApp.Avalonia.XPlat.ViewModels"
+             xmlns:domain="clr-namespace:EBikeBrainApp.Domain;assembly=EBikeBrainApp.Domain"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EBikeBrainApp.Avalonia.XPlat.Views.SettingsView"
              x:DataType="vm:SettingsViewModel">
-    Welcome to Avalonia!
+    <ScrollViewer>
+        <StackPanel HorizontalAlignment="Stretch">
+            <StackPanel.Styles>
+                <Style Selector=":is(Layoutable)">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                </Style>
+            </StackPanel.Styles>
+
+            <Label>Device</Label>
+            <ComboBox ItemsSource="{Binding Devices^}" SelectedItem="{Binding SelectedDevice.Value}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="domain:Device">
+                        <WrapPanel>
+                            <Label Content="{Binding Name}" />
+                            <Label Content="{Binding Id, StringFormat=({0})}" FontStyle="Italic" />
+                        </WrapPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
