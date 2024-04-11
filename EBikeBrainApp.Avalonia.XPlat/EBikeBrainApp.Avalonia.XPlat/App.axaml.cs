@@ -48,6 +48,7 @@ public class App : AvaloniaApp
         var services = new ServiceCollection();
 
         services.AddAvalonia();
+        services.AddPlatformSpecificServices();
         services.AddDemoImplementations();
         services.AddEBikeBrainApp<Runtime>();
 

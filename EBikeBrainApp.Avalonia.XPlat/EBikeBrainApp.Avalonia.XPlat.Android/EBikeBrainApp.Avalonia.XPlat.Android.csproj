@@ -19,10 +19,12 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)"/>
+        <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.20"/>
         <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1"/>
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\EBikeBrainApp.Implementations.Android\EBikeBrainApp.Implementations.Android.csproj"/>
         <ProjectReference Include="..\EBikeBrainApp.Avalonia.XPlat\EBikeBrainApp.Avalonia.XPlat.csproj"/>
     </ItemGroup>
 </Project>

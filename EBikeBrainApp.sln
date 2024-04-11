@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp.Application.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp.Utils", "EBikeBrainApp.Utils\EBikeBrainApp.Utils.csproj", "{E2F6F663-4071-4B00-81E9-9F148CC783AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp.Implementations.Android", "EBikeBrainApp.Implementations.Android\EBikeBrainApp.Implementations.Android.csproj", "{40E9A167-9929-45E1-8D23-1F5BA84C273D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,10 @@ Global
 		{E2F6F663-4071-4B00-81E9-9F148CC783AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2F6F663-4071-4B00-81E9-9F148CC783AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2F6F663-4071-4B00-81E9-9F148CC783AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40E9A167-9929-45E1-8D23-1F5BA84C273D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40E9A167-9929-45E1-8D23-1F5BA84C273D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40E9A167-9929-45E1-8D23-1F5BA84C273D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40E9A167-9929-45E1-8D23-1F5BA84C273D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,5 +131,6 @@ Global
 		{A6686361-3360-4BCC-94C4-0D4E067F7BE1} = {0465FC1E-4CE5-4C09-B0AE-EF5C0AC9C54D}
 		{FBB3AC6B-B446-43C3-8EFB-0246153466C6} = {38B3E1D8-F8FA-4268-8C79-DA8BB20BF001}
 		{40652D55-FBB3-4783-A94C-274D0B0EDC0E} = {3973967D-D61A-413C-8BDB-1502C81004BA}
+		{40E9A167-9929-45E1-8D23-1F5BA84C273D} = {3973967D-D61A-413C-8BDB-1502C81004BA}
 	EndGlobalSection
 EndGlobal
