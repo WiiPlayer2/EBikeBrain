@@ -13,5 +13,12 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <views:DisplayView DataContext="{Binding Display}" />
+    <TabControl Margin="5" TabStripPlacement="Bottom">
+        <TabItem Header="Display">
+            <views:DisplayView DataContext="{Binding Display}" />
+        </TabItem>
+        <TabItem Header="Settings">
+            <views:SettingsView DataContext="{Binding Settings}" />
+        </TabItem>
+    </TabControl>
 </UserControl>

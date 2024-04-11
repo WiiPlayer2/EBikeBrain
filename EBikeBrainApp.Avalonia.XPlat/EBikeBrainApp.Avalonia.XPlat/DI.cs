@@ -10,5 +10,6 @@ internal static class DI
     {
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<DisplayViewModel>();
+        services.AddSingleton<SettingsViewModel>();
     }
 }

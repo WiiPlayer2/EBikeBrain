@@ -3,8 +3,11 @@
 namespace EBikeBrainApp.Avalonia.XPlat.ViewModels;
 
 public class MainViewModel(
-    DisplayViewModel displayViewModel
+    DisplayViewModel displayViewModel,
+    SettingsViewModel settingsViewModel
 ) : ViewModelBase
 {
     public DisplayViewModel Display => displayViewModel;
+
+    public SettingsViewModel Settings => settingsViewModel;
 }
