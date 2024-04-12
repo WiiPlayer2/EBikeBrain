@@ -8,7 +8,8 @@ public static class DI
 {
     public static void AddAndroidServices(this IServiceCollection services)
     {
-        services.AddSingleton<IDeviceProvider, AndroidDeviceProvider>();
         services.AddSingleton(BluetoothAdapter.DefaultAdapter ?? throw new InvalidOperationException("Bluetooth is required."));
+        services.AddSingleton<IDeviceProvider, AndroidDeviceProvider>();
+        services.AddSingleton<IBikeMotorConnector, AndroidBikeMotorConnector>();
     }
 }

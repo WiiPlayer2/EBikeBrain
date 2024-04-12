@@ -1,5 +1,6 @@
 using EBikeBrainApp.Application.Abstractions;
 using EBikeBrainApp.Domain;
+using EBikeBrainApp.Implementations.Android;
 using EBikeBrainApp.Utils;
 using LanguageExt.UnitsOfMeasure;
 
@@ -12,7 +13,9 @@ public class DemoBikeMotorConnector : IBikeMotorConnector
     public async Task<IBikeMotor> ConnectDevice(DeviceId deviceId, CancellationToken cancellationToken = default)
     {
         await busy.Run(() => Task.Delay(1.Seconds(), cancellationToken), cancellationToken);
-        return new DemoBikeMotor();
+
+        var stream = typeof(DemoBikeMotorConnector).Assembly.GetManifestResourceStream("EBikeBrainApp.Implementations.Demo.demo.log") ?? throw new InvalidOperationException();
+        return new ProtocolInterceptorBikeMotor(new SlowStream(stream, 1.Milliseconds()));
     }
 
     public IObservable<bool> IsBusy => busy.IsBusy;

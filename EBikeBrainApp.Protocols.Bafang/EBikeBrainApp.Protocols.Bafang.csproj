@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\EBikeBrainApp.Application.Abstractions\EBikeBrainApp.Application.Abstractions.csproj"/>
+    </ItemGroup>
+
 </Project>

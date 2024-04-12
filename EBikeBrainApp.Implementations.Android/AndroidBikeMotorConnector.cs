@@ -1,11 +1,35 @@
+using Android.Bluetooth;
 using EBikeBrainApp.Application.Abstractions;
 using EBikeBrainApp.Domain;
+using EBikeBrainApp.Utils;
+using Java.Util;
 
 namespace EBikeBrainApp.Implementations.Android;
 
-public class AndroidBikeMotorConnector : IBikeMotorConnector
+public class AndroidBikeMotorConnector(BluetoothAdapter bluetoothAdapter) : IBikeMotorConnector, IDisposable
 {
-    public Task<IBikeMotor> ConnectDevice(DeviceId deviceId, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    private static readonly UUID RF_COMM_UUID = UUID.FromString("00001101-0000-1000-8000-00805F9B34FB")!;
 
-    public IObservable<bool> IsBusy { get; }
+    private readonly Busy connectingBusy = new();
+
+    public Task<IBikeMotor> ConnectDevice(DeviceId deviceId, CancellationToken cancellationToken = default) => connectingBusy.Run(() => Task.Run<IBikeMotor>(() =>
+    {
+        var bluetoothDevice = bluetoothAdapter.GetRemoteDevice(deviceId.Value);
+        if (bluetoothDevice is null)
+            throw new InvalidOperationException($"Failed to get bluetooth device {deviceId.Value}");
+
+        var socket = bluetoothDevice.CreateRfcommSocketToServiceRecord(RF_COMM_UUID);
+        if (socket is null)
+            throw new InvalidOperationException("Failed to create RFcomm socket.");
+
+        var bikeMotor = new ProtocolInterceptorBikeMotor(socket.InputStream!);
+        return bikeMotor;
+    }, cancellationToken), cancellationToken);
+
+    public IObservable<bool> IsBusy => connectingBusy.IsBusy;
+
+    public void Dispose()
+    {
+        connectingBusy.Dispose();
+    }
 }
