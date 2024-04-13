@@ -30,7 +30,8 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Spacing="8">
                 <Label HorizontalAlignment="Center" Content="Battery [%]" FontSize="{StaticResource TitleFontSize}" />
-                <Label HorizontalAlignment="Center" Content="--,-" FontSize="{StaticResource ValueFontSize}" />
+                <Label HorizontalAlignment="Center" Content="{Binding Battery^}"
+                       FontSize="{StaticResource ValueFontSize}" />
             </StackPanel>
             <StackPanel Grid.Column="2" Spacing="8">
                 <Label HorizontalAlignment="Center" Content="Power [W]" FontSize="{StaticResource TitleFontSize}" />

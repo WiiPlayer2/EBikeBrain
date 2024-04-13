@@ -93,8 +93,14 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
             .Where(t => IsRequest(t.Request, 0x11, 0x0A))
             .Select(t => ElectricCurrent.FromAmperes(t.Response[0] / 2.0));
 
+        Battery = messages
+            .Where(t => IsRequest(t.Request, 0x11, 0x11))
+            .Select(t => Percentage.From(t.Response[0]));
+
         connection = interceptedLines.Connect();
     }
+
+    public IObservable<Percentage> Battery { get; }
 
     public IObservable<ElectricCurrent> Current { get; }
 

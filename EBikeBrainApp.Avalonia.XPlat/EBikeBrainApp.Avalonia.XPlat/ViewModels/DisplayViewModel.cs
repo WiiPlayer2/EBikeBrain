@@ -40,6 +40,9 @@ public class DisplayViewModel : ViewModelBase, IDisposable
         Power = displayService.Power
             .Select(x => x.Watts.ToString("0.0"))
             .StartWith("---");
+        Battery = displayService.Battery
+            .Select(x => $"{x}%")
+            .StartWith("---");
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
         DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);
@@ -47,6 +50,8 @@ public class DisplayViewModel : ViewModelBase, IDisposable
         subscriptions = new CompositeDisposable(
             ConnectCommand.Subscribe(_ => displayService.Connect()));
     }
+
+    public IObservable<string> Battery { get; }
 
     public ReactiveCommand<object?> ConnectCommand { get; }
 

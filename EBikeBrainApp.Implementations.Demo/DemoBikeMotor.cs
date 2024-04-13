@@ -11,6 +11,15 @@ public class DemoBikeMotor : IBikeMotor, IDisposable
 {
     private readonly BehaviorSubject<PasLevel> pasLevelSubject = new(Domain.PasLevel.Level1);
 
+    public IObservable<Percentage> Battery { get; } = Observable.Create<Percentage>(async (observer, token) =>
+    {
+        while (!token.IsCancellationRequested)
+        {
+            observer.OnNext(Percentage.From(Random.Shared.Next(1000) / 10.0));
+            await Task.Delay(1.Seconds(), token);
+        }
+    });
+
     public IObservable<ElectricCurrent> Current { get; } = Observable.Create<ElectricCurrent>(async (observer, token) =>
     {
         while (!token.IsCancellationRequested)

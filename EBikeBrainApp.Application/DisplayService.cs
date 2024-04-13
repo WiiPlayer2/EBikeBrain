@@ -15,9 +15,17 @@ public class DisplayService<RT>(
     private readonly IObservable<SpeedService<RT>> speedService = connectionService.BikeMotorConnection
         .Select(x => new SpeedService<RT>(x, configurationService));
 
+    public IObservable<Percentage> Battery { get; } = connectionService.BikeMotorConnection
+        .Select(x => x.Battery)
+        .Switch();
+
     public IObservable<bool> CanConnectBike => connectionService.CanConnect;
 
     public IObservable<bool> CanDisconnectBike => connectionService.CanDisconnect;
+
+    public IObservable<ElectricCurrent> Current { get; } = connectionService.BikeMotorConnection
+        .Select(x => x.Current)
+        .Switch();
 
     public IObservable<Option<Aff<RT, Unit>>> DecreasePasLevelCommand { get; }
 
@@ -26,6 +34,10 @@ public class DisplayService<RT>(
     public IObservable<Option<PasLevel>> PasLevel => pasService
         .Select(x => x.Current.Select(x => x.ToOption()))
         .Switch();
+
+    public IObservable<Power> Power => Current
+        .CombineLatest(configurationService.Bike.Select(x => x.MotorVoltage).Distinct())
+        .Select(t => t.First * t.Second.Value);
 
     public IObservable<Option<RotationalSpeed>> RotationalSpeed { get; } = connectionService.BikeMotorConnection
         .Select(x => x.RotationalSpeed.Select(x => x.ToOption()))

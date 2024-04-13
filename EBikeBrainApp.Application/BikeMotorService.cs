@@ -9,6 +9,8 @@ public class BikeMotorService<RT>(
     IBikeMotor bikeMotor)
     where RT : struct, HasCancel<RT>
 {
+    public IObservable<Percentage> Battery => bikeMotor.Battery;
+
     public IObservable<ElectricCurrent> Current => bikeMotor.Current;
 
     public IObservable<Fin<PasLevel>> PasLevel { get; }
