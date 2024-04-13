@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace EBikeBrainApp.Implementations.Demo;
 
 public class SlowStream : Stream
@@ -6,10 +8,14 @@ public class SlowStream : Stream
 
     private readonly TimeSpan interval;
 
+    private readonly Stopwatch waitStopwatch;
+
     public SlowStream(Stream baseStream, TimeSpan interval)
     {
         this.baseStream = baseStream;
         this.interval = interval;
+        waitStopwatch = new Stopwatch();
+        waitStopwatch.Start();
     }
 
     public override bool CanRead => baseStream.CanRead;
@@ -39,34 +45,16 @@ public class SlowStream : Stream
 
     public override int Read(byte[] buffer, int offset, int count)
     {
-        var totalReadCount = 0;
-        for (var i = 0; i < count; i++)
-        {
-            var readCount = baseStream.Read(buffer, offset + i, 1);
-            if (readCount == 0)
-                return totalReadCount;
+        if (waitStopwatch.Elapsed < interval)
+            return 0;
 
-            totalReadCount += readCount;
-            Thread.Sleep(interval);
-        }
+        waitStopwatch.Stop();
+        var readCount = baseStream.Read(buffer, offset, 1);
 
-        return totalReadCount;
-    }
+        if (readCount > 0)
+            waitStopwatch.Restart();
 
-    public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
-    {
-        var totalReadCount = 0;
-        for (var i = 0; i < count; i++)
-        {
-            var readCount = await baseStream.ReadAsync(buffer, offset + i, 1, cancellationToken);
-            if (readCount == 0)
-                return totalReadCount;
-
-            totalReadCount += readCount;
-            await Task.Delay(interval, cancellationToken);
-        }
-
-        return totalReadCount;
+        return readCount;
     }
 
     public override long Seek(long offset, SeekOrigin origin) => throw new NotImplementedException();

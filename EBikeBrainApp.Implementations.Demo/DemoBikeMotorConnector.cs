@@ -1,6 +1,6 @@
 using EBikeBrainApp.Application.Abstractions;
 using EBikeBrainApp.Domain;
-using EBikeBrainApp.Implementations.Android;
+using EBikeBrainApp.Protocols.Bafang;
 using EBikeBrainApp.Utils;
 using LanguageExt.UnitsOfMeasure;
 

@@ -1,6 +1,7 @@
 using Android.Bluetooth;
 using EBikeBrainApp.Application.Abstractions;
 using EBikeBrainApp.Domain;
+using EBikeBrainApp.Protocols.Bafang;
 using EBikeBrainApp.Utils;
 using Java.Util;
 

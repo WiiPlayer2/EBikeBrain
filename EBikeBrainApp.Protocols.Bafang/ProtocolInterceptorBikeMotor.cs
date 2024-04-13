@@ -5,7 +5,7 @@ using EBikeBrainApp.Application.Abstractions;
 using EBikeBrainApp.Domain;
 using UnitsNet;
 
-namespace EBikeBrainApp.Implementations.Android;
+namespace EBikeBrainApp.Protocols.Bafang;
 
 public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 {
@@ -20,7 +20,20 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
         var interceptedLines = Observable.Create<string>(async (observer, token) =>
             {
                 using var reader = new StreamReader(inputStream);
-                while (await reader.ReadLineAsync(token) is { } line) observer.OnNext(line);
+
+                var text = string.Empty;
+                while (!token.IsCancellationRequested)
+                {
+                    text += await reader.ReadToEndAsync(token);
+
+                    int newLineIndex;
+                    while ((newLineIndex = text.IndexOf('\n')) >= 0)
+                    {
+                        var line = text[..newLineIndex];
+                        observer.OnNext(line);
+                        text = text[(newLineIndex + 1)..];
+                    }
+                }
             })
             .Do(line => Debug.WriteLine(line))
             .Publish();
