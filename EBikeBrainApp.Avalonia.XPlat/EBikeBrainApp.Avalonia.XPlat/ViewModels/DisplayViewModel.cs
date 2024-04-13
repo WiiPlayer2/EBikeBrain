@@ -37,6 +37,9 @@ public class DisplayViewModel : ViewModelBase, IDisposable
             .Select(x => x.Match(
                 x => x.RevolutionsPerMinute.ToString("0"),
                 () => "---"));
+        Power = displayService.Power
+            .Select(x => x.Watts.ToString("0.0"))
+            .StartWith("---");
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
         DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);
@@ -50,6 +53,8 @@ public class DisplayViewModel : ViewModelBase, IDisposable
     public ReactiveCommand<object?> DisconnectCommand { get; }
 
     public IObservable<string> PasLevel { get; }
+
+    public IObservable<string> Power { get; }
 
     public IObservable<string> RotationsPerMinute { get; }
 

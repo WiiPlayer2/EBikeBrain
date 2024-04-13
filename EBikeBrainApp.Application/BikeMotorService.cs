@@ -1,6 +1,5 @@
 using System.Reactive;
 using System.Reactive.Linq;
-using EBikeBrainApp.Application.Abstractions;
 using LanguageExt.Common;
 using LanguageExt.Effects.Traits;
 
@@ -10,6 +9,8 @@ public class BikeMotorService<RT>(
     IBikeMotor bikeMotor)
     where RT : struct, HasCancel<RT>
 {
+    public IObservable<ElectricCurrent> Current => bikeMotor.Current;
+
     public IObservable<Fin<PasLevel>> PasLevel { get; }
         = WrapErrors(bikeMotor.PasLevel, () => "Failed to read PAS level");
 

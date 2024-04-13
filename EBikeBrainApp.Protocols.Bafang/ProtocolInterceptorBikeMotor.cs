@@ -89,8 +89,14 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                 _ => Domain.PasLevel.Unknown, // 0x06
             });
 
+        Current = messages
+            .Where(t => IsRequest(t.Request, 0x11, 0x0A))
+            .Select(t => ElectricCurrent.FromAmperes(t.Response[0] / 2.0));
+
         connection = interceptedLines.Connect();
     }
+
+    public IObservable<ElectricCurrent> Current { get; }
 
     public IObservable<PasLevel> PasLevel { get; }
 

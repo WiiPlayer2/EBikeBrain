@@ -1,4 +1,5 @@
 namespace EBikeBrainApp.Application;
 
 public record BikeConfiguration(
-    WheelDiameter WheelDiameter);
+    WheelDiameter WheelDiameter,
+    MotorVoltage MotorVoltage);
