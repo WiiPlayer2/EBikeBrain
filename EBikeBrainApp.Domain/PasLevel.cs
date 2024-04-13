@@ -2,6 +2,10 @@ namespace EBikeBrainApp.Domain;
 
 public enum PasLevel
 {
+    Unknown,
+
+    Level0,
+
     Level1,
 
     Level2,

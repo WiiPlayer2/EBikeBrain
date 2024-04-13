@@ -19,6 +19,11 @@ public class DisplayViewModel : ViewModelBase, IDisposable
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
         DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);
+        PasLevel = Observable.Return(Option<PasLevel>.None).Concat(displayService.PasLevel)
+            .Select(x => x.Match(x => x switch
+            {
+                _ => x.ToString(),
+            }, () => "PAS -"));
 
         subscriptions = new CompositeDisposable(
             ConnectCommand.Subscribe(_ => displayService.Connect()));
@@ -27,6 +32,8 @@ public class DisplayViewModel : ViewModelBase, IDisposable
     public ReactiveCommand<object?> ConnectCommand { get; }
 
     public ReactiveCommand<object?> DisconnectCommand { get; }
+
+    public IObservable<string> PasLevel { get; }
 
     public ReadOnlyReactiveProperty<string> Speed { get; }
 
