@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using EBikeBrainApp.Application;
 using LanguageExt.Sys.Live;
 using Reactive.Bindings;
+using Pas = EBikeBrainApp.Domain.PasLevel;
 
 namespace EBikeBrainApp.Avalonia.XPlat.ViewModels;
 
@@ -13,17 +14,28 @@ public class DisplayViewModel : ViewModelBase, IDisposable
 
     public DisplayViewModel(DisplayService<Runtime> displayService)
     {
-        Speed = displayService.Speed
+        Speed = displayService.Speed.StartWith(None)
             .Select(x => x.Match(x => x.KilometersPerHour.ToString("0.0"), "---"))
             .ToReadOnlyReactiveProperty();
+        PasLevel = displayService.PasLevel.StartWith(None)
+            .Select(x => x.Match(x => x switch
+            {
+                Pas.Level0 => "PAS 0",
+                Pas.Level1 => "PAS 1",
+                Pas.Level2 => "PAS 2",
+                Pas.Level3 => "PAS 3",
+                Pas.Level4 => "PAS 4",
+                Pas.Level5 => "PAS 5",
+                Pas.Level6 => "PAS 6",
+                Pas.Level7 => "PAS 7",
+                Pas.Level8 => "PAS 8",
+                Pas.Level9 => "PAS 9",
+                Pas.Unknown => "PAS ?",
+                _ => x.ToString(),
+            }, () => "PAS -"));
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
         DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);
-        PasLevel = Observable.Return(Option<PasLevel>.None).Concat(displayService.PasLevel)
-            .Select(x => x.Match(x => x switch
-            {
-                _ => x.ToString(),
-            }, () => "PAS -"));
 
         subscriptions = new CompositeDisposable(
             ConnectCommand.Subscribe(_ => displayService.Connect()));
