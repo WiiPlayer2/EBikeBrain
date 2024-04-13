@@ -25,7 +25,8 @@
             </Grid.Resources>
             <StackPanel Grid.Column="0" Spacing="8">
                 <Label HorizontalAlignment="Center" Content="RPM" FontSize="{StaticResource TitleFontSize}" />
-                <Label HorizontalAlignment="Center" Content="--,-" FontSize="{StaticResource ValueFontSize}" />
+                <Label HorizontalAlignment="Center" Content="{Binding RotationsPerMinute^}"
+                       FontSize="{StaticResource ValueFontSize}" />
             </StackPanel>
             <StackPanel Grid.Column="1" Spacing="8">
                 <Label HorizontalAlignment="Center" Content="Battery [%]" FontSize="{StaticResource TitleFontSize}" />

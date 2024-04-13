@@ -33,6 +33,10 @@ public class DisplayViewModel : ViewModelBase, IDisposable
                 Pas.Unknown => "PAS ?",
                 _ => x.ToString(),
             }, () => "PAS -"));
+        RotationsPerMinute = displayService.RotationalSpeed.StartWith(None)
+            .Select(x => x.Match(
+                x => x.RevolutionsPerMinute.ToString("0"),
+                () => "---"));
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
         DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);
@@ -46,6 +50,8 @@ public class DisplayViewModel : ViewModelBase, IDisposable
     public ReactiveCommand<object?> DisconnectCommand { get; }
 
     public IObservable<string> PasLevel { get; }
+
+    public IObservable<string> RotationsPerMinute { get; }
 
     public ReadOnlyReactiveProperty<string> Speed { get; }
 

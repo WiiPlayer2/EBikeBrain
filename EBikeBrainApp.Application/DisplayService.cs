@@ -27,6 +27,10 @@ public class DisplayService<RT>(
         .Select(x => x.Current.Select(x => x.ToOption()))
         .Switch();
 
+    public IObservable<Option<RotationalSpeed>> RotationalSpeed { get; } = connectionService.BikeMotorConnection
+        .Select(x => x.RotationalSpeed.Select(x => x.ToOption()))
+        .Switch();
+
     public IObservable<Option<Speed>> Speed => speedService
         .Select(x => x.Speed.Select(x => x.ToOption()))
         .Switch();
