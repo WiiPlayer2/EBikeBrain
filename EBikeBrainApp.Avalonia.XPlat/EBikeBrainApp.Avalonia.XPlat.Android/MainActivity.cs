@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.ReactiveUI;
@@ -32,5 +33,12 @@ public class MainActivity : AvaloniaMainActivity<App>
         base.OnCreate(savedInstanceState);
 
         ActivityStateManager.Default.Init(Application!);
+    }
+
+    protected override void OnStart()
+    {
+        base.OnStart();
+
+        Window!.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
     }
 }
