@@ -18,3 +18,6 @@ public readonly partial struct Percentage
         return isValid ? Validation.Ok : Validation.Invalid("Value must be between 0-100 inclusively");
     }
 }
+
+[ValueObject<string>]
+public readonly partial struct LogEntry;

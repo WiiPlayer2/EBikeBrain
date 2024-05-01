@@ -1,4 +1,6 @@
-﻿using EBikeBrainApp.Application;
+﻿using EBikeBrain.Implementations.Eventing;
+using EBikeBrainApp.Application;
+using EBikeBrainApp.Application.Abstractions;
 using LanguageExt.Effects.Traits;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,5 +14,13 @@ public static class DI
         services.AddSingleton<DisplayService<RT>>();
         services.AddSingleton<ConnectionService<RT>>();
         services.AddSingleton<ConfigurationService>();
+        services.AddSingleton<LogService>();
+    }
+
+    public static void AddEventing(this IServiceCollection services)
+    {
+        services.AddSingleton<EventBus>();
+        services.AddSingleton(typeof(IEventStream<>), typeof(EventStream<>));
+        services.AddSingleton(typeof(ICommandPublisher<>), typeof(CommandPublisher<>));
     }
 }

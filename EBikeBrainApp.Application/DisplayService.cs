@@ -5,8 +5,8 @@ namespace EBikeBrainApp.Application;
 
 public class DisplayService<RT>(
     ConnectionService<RT> connectionService,
-    ConfigurationService configurationService
-)
+    ConfigurationService configurationService,
+    LogService logService)
     where RT : struct, HasCancel<RT>
 {
     private readonly IObservable<PasService<RT>> pasService = connectionService.BikeMotorConnection
@@ -30,6 +30,8 @@ public class DisplayService<RT>(
     public IObservable<Option<Aff<RT, Unit>>> DecreasePasLevelCommand { get; }
 
     public IObservable<Option<Aff<RT, Unit>>> IncreasePasLevelCommand { get; }
+
+    public IObservable<Lst<LogEntry>> LogEntries => logService.LogEntries;
 
     public IObservable<Option<PasLevel>> PasLevel => pasService
         .Select(x => x.Current.Select(x => x.ToOption()))

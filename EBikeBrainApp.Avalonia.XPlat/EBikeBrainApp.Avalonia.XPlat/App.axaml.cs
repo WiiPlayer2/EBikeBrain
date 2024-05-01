@@ -51,6 +51,7 @@ public class App : AvaloniaApp
         services.AddPlatformSpecificServices();
         services.AddDemoImplementations();
         services.AddEBikeBrainApp<Runtime>();
+        services.AddEventing();
 
         return services.BuildServiceProvider();
     }

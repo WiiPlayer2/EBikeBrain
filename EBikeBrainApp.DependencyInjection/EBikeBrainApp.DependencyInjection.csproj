@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\EBikeBrain.Implementations.Eventing\EBikeBrain.Implementations.Eventing.csproj"/>
         <ProjectReference Include="..\EBikeBrainApp.Application\EBikeBrainApp.Application.csproj"/>
     </ItemGroup>
 

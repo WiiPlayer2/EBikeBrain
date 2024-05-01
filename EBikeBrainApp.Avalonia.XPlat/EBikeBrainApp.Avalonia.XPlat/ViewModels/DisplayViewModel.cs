@@ -43,6 +43,8 @@ public class DisplayViewModel : ViewModelBase, IDisposable
         Battery = displayService.Battery
             .Select(x => $"{x}%")
             .StartWith("---");
+        LogOutput = displayService.LogEntries
+            .Select(x => string.Join("\n", x));
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
         DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);
@@ -56,6 +58,8 @@ public class DisplayViewModel : ViewModelBase, IDisposable
     public ReactiveCommand<object?> ConnectCommand { get; }
 
     public ReactiveCommand<object?> DisconnectCommand { get; }
+
+    public IObservable<string> LogOutput { get; }
 
     public IObservable<string> PasLevel { get; }
 
