@@ -13,7 +13,7 @@ public class AndroidBikeMotorConnector(BluetoothAdapter bluetoothAdapter) : IBik
 
     private readonly Busy connectingBusy = new();
 
-    public Task<IBikeMotor> ConnectDevice(DeviceId deviceId, CancellationToken cancellationToken = default) => connectingBusy.Run(() => Task.Run<IBikeMotor>(() =>
+    public Task<IBikeMotor> ConnectDevice(DeviceId deviceId, CancellationToken cancellationToken = default) => connectingBusy.Run(() => Task.Run<IBikeMotor>(async () =>
     {
         var bluetoothDevice = bluetoothAdapter.GetRemoteDevice(deviceId.Value);
         if (bluetoothDevice is null)
@@ -23,6 +23,7 @@ public class AndroidBikeMotorConnector(BluetoothAdapter bluetoothAdapter) : IBik
         if (socket is null)
             throw new InvalidOperationException("Failed to create RFcomm socket.");
 
+        await socket.ConnectAsync();
         var bikeMotor = new ProtocolInterceptorBikeMotor(socket.InputStream!);
         return bikeMotor;
     }, cancellationToken), cancellationToken);
