@@ -5,7 +5,7 @@ namespace EBikeBrainApp.Application;
 
 public class ConfigurationService : IDisposable
 {
-    private readonly BehaviorSubject<BikeConnectionConfiguration> connection = new(new BikeConnectionConfiguration(new Device("Test", DeviceId.From("test"))));
+    private readonly BehaviorSubject<BikeConnectionConfiguration> connection = new(new BikeConnectionConfiguration(new Device("Test", DeviceId.From("test2345"))));
 
     public IObservable<BikeConfiguration> Bike { get; } = Observable.Return(new BikeConfiguration(
         WheelDiameter.From(Length.FromInches(28)),
