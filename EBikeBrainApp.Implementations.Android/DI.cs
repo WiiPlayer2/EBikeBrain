@@ -11,5 +11,6 @@ public static class DI
         services.AddSingleton(BluetoothAdapter.DefaultAdapter ?? throw new InvalidOperationException("Bluetooth is required."));
         services.AddSingleton<IDeviceProvider, AndroidDeviceProvider>();
         services.AddSingleton<IBikeMotorConnector, AndroidBikeMotorConnector>();
+        services.AddSingleton<IConfigurationStore<BikeConnectionConfiguration>, AndroidConfigurationStore<BikeConnectionConfiguration>>();
     }
 }

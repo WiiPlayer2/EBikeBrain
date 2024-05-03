@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\EBikeBrainApp.Application.Abstractions\EBikeBrainApp.Application.Abstractions.csproj"/>
+        <ProjectReference Include="..\EBikeBrainApp.Implementations.JsonConfigurationStore\EBikeBrainApp.Implementations.JsonConfigurationStore.csproj"/>
         <ProjectReference Include="..\EBikeBrainApp.Protocols.Bafang\EBikeBrainApp.Protocols.Bafang.csproj"/>
         <ProjectReference Include="..\EBikeBrainApp.Utils\EBikeBrainApp.Utils.csproj"/>
     </ItemGroup>
