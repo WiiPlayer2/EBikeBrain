@@ -10,17 +10,17 @@ public class ConfigurationService : IDisposable
 
     private readonly CompositeDisposable subscriptions;
 
-    public ConfigurationService(IConfigurationStore configurationStore)
+    public ConfigurationService(IConfigurationStore<BikeConnectionConfiguration> connectionConfigStore)
     {
         var connectionObservable = Observable
-            .FromAsync(configurationStore.LoadConnectionConfig)
+            .FromAsync(connectionConfigStore.Load)
             .Select(x => x.IfNone(() => new BikeConnectionConfiguration(None)))
             .Concat(connectionSubject);
         Connection = Subject.Create<BikeConnectionConfiguration>(connectionSubject, connectionObservable);
 
         subscriptions = new CompositeDisposable(
             connectionSubject
-                .SelectMany(x => Observable.FromAsync(token => configurationStore.StoreConnectionConfig(x, token)))
+                .SelectMany(x => Observable.FromAsync(token => connectionConfigStore.Store(x, token)))
                 .Subscribe(_ => { })
         );
     }

@@ -3,27 +3,16 @@ using LanguageExt;
 
 namespace EBikeBrainApp.Implementations.Demo;
 
-public class DemoConfigurationStore : IConfigurationStore
+public class DemoConfigurationStore<T> : IConfigurationStore<T>
 {
-    private Option<BikeConfiguration> bikeConfiguration;
+    private Option<T> config;
 
-    private Option<BikeConnectionConfiguration> connectionConfiguration;
+    public Task<Option<T>> Load(CancellationToken cancellationToken = default) =>
+        Task.FromResult(config);
 
-    public Task<Option<BikeConfiguration>> LoadBikeConfig(CancellationToken cancellationToken = default) =>
-        Task.FromResult(bikeConfiguration);
-
-    public Task<Option<BikeConnectionConfiguration>> LoadConnectionConfig(CancellationToken cancellationToken = default) =>
-        Task.FromResult(connectionConfiguration);
-
-    public Task StoreBikeConfig(BikeConfiguration config, CancellationToken cancellationToken = default)
+    public Task Store(T config, CancellationToken cancellationToken = default)
     {
-        bikeConfiguration = config;
-        return Task.CompletedTask;
-    }
-
-    public Task StoreConnectionConfig(BikeConnectionConfiguration config, CancellationToken cancellationToken = default)
-    {
-        connectionConfiguration = config;
+        this.config = config;
         return Task.CompletedTask;
     }
 }
