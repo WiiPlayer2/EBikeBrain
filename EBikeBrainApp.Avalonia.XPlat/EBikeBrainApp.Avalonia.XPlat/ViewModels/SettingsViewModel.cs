@@ -19,7 +19,7 @@ public class SettingsViewModel : ViewModelBase, IDisposable
         deviceProvider1 = deviceProvider;
 
         SelectedDevice = configurationService.Connection
-            .Select(x => x.Device)
+            .Select(x => x.Device.IfNoneUnsafe(default(Device?)))
             .DistinctUntilChanged()
             .ToReactiveProperty();
 

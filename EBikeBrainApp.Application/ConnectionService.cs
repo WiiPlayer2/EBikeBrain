@@ -12,7 +12,8 @@ public class ConnectionService<RT>(
     where RT : struct, HasCancel<RT>
 {
     public IConnectableObservable<BikeMotorService<RT>> BikeMotorConnection { get; } = configurationService.Connection
-        .Select(config => CreateBikeMotorObservable(bikeMotorConnector, config.Device.Id, logEvents))
+        .SelectMany(x => x.Device)
+        .Select(device => CreateBikeMotorObservable(bikeMotorConnector, device.Id, logEvents))
         .Switch()
         .Select(x => new BikeMotorService<RT>(x))
         .Publish();
