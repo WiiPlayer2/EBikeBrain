@@ -10,6 +10,6 @@ public static class DI
     {
         services.TryAddSingleton<IBikeMotorConnector, DemoBikeMotorConnector>();
         services.TryAddSingleton<IDeviceProvider, DemoDeviceProvider>();
-        services.TryAddSingleton<IConfigurationStore<BikeConnectionConfiguration>, DemoConfigurationStore<BikeConnectionConfiguration>>();
+        services.TryAddSingleton(typeof(IConfigurationStore<>), typeof(DemoConfigurationStore<>));
     }
 }
