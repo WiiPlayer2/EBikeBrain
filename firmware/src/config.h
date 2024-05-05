@@ -1,0 +1,17 @@
+#pragma once
+
+#define SECOND 1000
+#define SECONDS SECOND
+
+#define PIN_MOTOR_ENABLE_OUT 18
+#define PIN_DISPLAY_ENABLE_IN 4
+
+#define SERIAL_MOTOR Serial2
+#define SERIAL_DISPLAY Serial
+
+#define BT_NAME "EBikeBrain"
+
+#define PASSTHROUGH_MODE_WAIT (30 * SECONDS)
+
+// #define ENABLE_DISPLAY_PIN
+#define ENABLE_LOGGING_PASSTHROUGH
