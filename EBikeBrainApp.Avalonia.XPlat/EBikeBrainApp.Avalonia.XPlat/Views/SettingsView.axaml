@@ -13,8 +13,14 @@
                 <Style Selector=":is(Layoutable)">
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                 </Style>
+                <Style Selector="Label.header">
+                    <Setter Property="FontSize" Value="20" />
+                    <Setter Property="Margin" Value="0,12,0,0" />
+                </Style>
             </StackPanel.Styles>
 
+            <Label Classes="header">Connection</Label>
+            
             <Label>Device</Label>
             <ComboBox ItemsSource="{Binding Devices^}" SelectedItem="{Binding SelectedDevice.Value}">
                 <ComboBox.ItemTemplate>
@@ -26,6 +32,14 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+
+            <Label Classes="header">Bike</Label>
+
+            <Label>Wheel Diameter [in]</Label>
+            <NumericUpDown Value="{Binding SelectedWheelDiameter.Value}" FormatString="0" />
+
+            <Label>Motor Voltage [V]</Label>
+            <NumericUpDown Value="{Binding SelectedMotorVoltage.Value}" FormatString="0" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

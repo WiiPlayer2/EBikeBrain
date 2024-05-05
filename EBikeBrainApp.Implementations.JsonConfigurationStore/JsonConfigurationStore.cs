@@ -12,6 +12,8 @@ public abstract class JsonConfigurationStore<T> : IConfigurationStore<T>
         Converters =
         {
             new OptionConverterFactory(),
+            new MotorVoltageConverter(),
+            new WheelDiameterConverter(),
         },
     };
 
