@@ -2,6 +2,8 @@
 using EBikeBrainApp.Application;
 using EBikeBrainApp.Application.Abstractions;
 using EBikeBrainApp.Application.Abstractions.Commands;
+using EBikeBrainApp.Application.Commanding;
+using EBikeBrainApp.Application.Eventing;
 using LanguageExt.Effects.Traits;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,7 +26,7 @@ public static class DI
         services.AddCommandHandler<ConnectDevice, ConnectDeviceHandler>();
 
         services.AddEventBusInitializer<BikeMotorBusInitializer>();
-        services.AddEventBusInitializer<BikeSpeedCalculation>();
+        services.AddEventBusInitializer<BikeMotorCalculations>();
     }
 
     public static void AddEventBusInitializer<TInitializer>(this IServiceCollection services)

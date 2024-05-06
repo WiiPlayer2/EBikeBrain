@@ -1,7 +1,7 @@
 using EBikeBrainApp.Application.Abstractions.Commands;
 using EBikeBrainApp.Application.Abstractions.Events;
 
-namespace EBikeBrainApp.Application;
+namespace EBikeBrainApp.Application.Commanding;
 
 public class ConnectDeviceHandler(
     IBikeMotorConnector bikeMotorConnector,

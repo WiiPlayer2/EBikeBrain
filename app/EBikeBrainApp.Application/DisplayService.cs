@@ -1,6 +1,5 @@
 using System.Reactive.Linq;
 using EBikeBrainApp.Application.Abstractions.Commands;
-using EBikeBrainApp.Application.Abstractions.Events;
 using EBikeBrainApp.Domain.Events;
 using LanguageExt.Effects.Traits;
 
@@ -14,21 +13,12 @@ public class DisplayService<RT>(
     ICommandPublisher<ConnectDevice> connectDevicePublisher)
     where RT : struct, HasCancel<RT>
 {
-    private readonly IObservable<BikeMotorService<RT>> bikeMotorService = eventBus
-        .GetStream<BikeMotorConnected>()
-        .Select(x => new BikeMotorService<RT>(x.BikeMotor));
-
-    public IObservable<Percentage> Battery => bikeMotorService
-        .Select(x => x.Battery)
-        .Switch();
+    public IObservable<BikeMotorBatteryPercentage> Battery => eventBus
+        .GetStream<BikeMotorBatteryPercentage>();
 
     public IObservable<bool> CanConnectBike => connectionService.CanConnect;
 
     public IObservable<bool> CanDisconnectBike => connectionService.CanDisconnect;
-
-    public IObservable<ElectricCurrent> Current => bikeMotorService
-        .Select(x => x.Current)
-        .Switch();
 
     public IObservable<Option<Aff<RT, Unit>>> DecreasePasLevelCommand { get; }
 
@@ -36,16 +26,11 @@ public class DisplayService<RT>(
 
     public IObservable<Lst<LogEntry>> LogEntries => logService.LogEntries;
 
-    public IObservable<Option<PasLevel>> PasLevel => pasService
-        .Select(x => x.Current.Select(x => x.ToOption()))
-        .Switch();
+    public IObservable<BikeMotorPasLevel> PasLevel => eventBus
+        .GetStream<BikeMotorPasLevel>();
 
-    private IObservable<PasService<RT>> pasService => bikeMotorService
-        .Select(x => new PasService<RT>(x));
-
-    public IObservable<Power> Power => Current
-        .CombineLatest(configurationService.Bike.Select(x => x.MotorVoltage).Distinct())
-        .Select(t => t.First * t.Second.Value);
+    public IObservable<BikeMotorPower> Power => eventBus
+        .GetStream<BikeMotorPower>();
 
     public IObservable<WheelRotationalSpeed> RotationalSpeed { get; } = eventBus
         .GetStream<WheelRotationalSpeed>();

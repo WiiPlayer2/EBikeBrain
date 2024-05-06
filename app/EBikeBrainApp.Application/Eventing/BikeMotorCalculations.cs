@@ -1,9 +1,9 @@
 using System.Reactive.Linq;
 using EBikeBrainApp.Domain.Events;
 
-namespace EBikeBrainApp.Application;
+namespace EBikeBrainApp.Application.Eventing;
 
-public class BikeSpeedCalculation(
+public class BikeMotorCalculations(
     ConfigurationService configurationService)
     : IEventBusInitializer
 {
@@ -13,5 +13,10 @@ public class BikeSpeedCalculation(
             bus.GetStream<WheelRotationalSpeed>()
                 .CombineLatest(configurationService.Bike, (speed, configuration) => (speed, configuration))
                 .Select(t => BikeSpeed.From(t.speed.Value.ToLinearSpeed(t.configuration.WheelDiameter.Value))));
+
+        bus.AddStream(
+            bus.GetStream<BikeMotorCurrent>()
+                .CombineLatest(configurationService.Bike, (current, configuration) => (current, configuration))
+                .Select(t => BikeMotorPower.From(t.current.Value * t.configuration.MotorVoltage.Value)));
     }
 }

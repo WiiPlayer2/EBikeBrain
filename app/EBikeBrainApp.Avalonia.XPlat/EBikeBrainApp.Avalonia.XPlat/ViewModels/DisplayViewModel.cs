@@ -17,8 +17,8 @@ public class DisplayViewModel : ViewModelBase, IDisposable
         Speed = displayService.Speed
             .Select(x => x.Value.KilometersPerHour.ToString("0.0"))
             .StartWith("---");
-        PasLevel = displayService.PasLevel.StartWith(None)
-            .Select(x => x.Match(x => x switch
+        PasLevel = displayService.PasLevel
+            .Select(x => x.Value switch
             {
                 Pas.Level0 => "PAS 0",
                 Pas.Level1 => "PAS 1",
@@ -32,12 +32,13 @@ public class DisplayViewModel : ViewModelBase, IDisposable
                 Pas.Level9 => "PAS 9",
                 Pas.Unknown => "PAS ?",
                 _ => x.ToString(),
-            }, () => "PAS -"));
+            })
+            .StartWith("PAS -");
         RotationsPerMinute = displayService.RotationalSpeed
             .Select(x => x.Value.RevolutionsPerMinute.ToString("0"))
             .StartWith("---");
         Power = displayService.Power
-            .Select(x => x.Watts.ToString("0.0"))
+            .Select(x => x.Value.Watts.ToString("0.0"))
             .StartWith("---");
         Battery = displayService.Battery
             .Select(x => $"{x}%")
