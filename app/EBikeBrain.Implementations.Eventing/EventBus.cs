@@ -13,7 +13,8 @@ public class EventBus : IEventBus, ISubject<object>, IDisposable
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        streamSubscriptions.Dispose();
+        baseSubject.Dispose();
     }
 
     public void AddStream<T>(IObservable<T> stream)
