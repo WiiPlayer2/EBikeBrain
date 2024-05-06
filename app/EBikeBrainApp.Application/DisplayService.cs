@@ -50,21 +50,15 @@ public class DisplayService<RT>(
     public IObservable<WheelRotationalSpeed> RotationalSpeed { get; } = eventBus
         .GetStream<WheelRotationalSpeed>();
 
-    // public IObservable<BikeSpeed> Speed { get; } = eventBus
-    //     .GetStream<BikeSpeed>();
-    public IObservable<BikeSpeed> Speed => speedService
-        .Select(x => x.Speed)
-        .Switch()
-        .Select(x => BikeSpeed.From((Speed) x));
-
-    private IObservable<SpeedService<RT>> speedService => bikeMotorService
-        .Select(x => new SpeedService<RT>(x, configurationService, eventBus));
+    public IObservable<BikeSpeed> Speed { get; } = eventBus
+        .GetStream<BikeSpeed>();
 
     public async void Connect()
     {
         var device = await configurationService.Connection
             .SelectMany(x => x.Device)
             .FirstOrDefaultAsync();
+
         if (device is null)
             return;
 

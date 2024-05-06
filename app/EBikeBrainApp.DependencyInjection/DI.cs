@@ -24,6 +24,7 @@ public static class DI
         services.AddCommandHandler<ConnectDevice, ConnectDeviceHandler>();
 
         services.AddEventBusInitializer<BikeMotorBusInitializer>();
+        services.AddEventBusInitializer<BikeSpeedCalculation>();
     }
 
     public static void AddEventBusInitializer<TInitializer>(this IServiceCollection services)
