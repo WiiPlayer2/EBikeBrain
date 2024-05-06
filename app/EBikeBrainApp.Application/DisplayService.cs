@@ -1,4 +1,5 @@
 using System.Reactive.Linq;
+using EBikeBrainApp.Domain.Events;
 using LanguageExt.Effects.Traits;
 
 namespace EBikeBrainApp.Application;
@@ -6,14 +7,15 @@ namespace EBikeBrainApp.Application;
 public class DisplayService<RT>(
     ConnectionService<RT> connectionService,
     ConfigurationService configurationService,
-    LogService logService)
+    LogService logService,
+    IEventBus eventBus)
     where RT : struct, HasCancel<RT>
 {
     private readonly IObservable<PasService<RT>> pasService = connectionService.BikeMotorConnection
         .Select(x => new PasService<RT>(x));
 
     private readonly IObservable<SpeedService<RT>> speedService = connectionService.BikeMotorConnection
-        .Select(x => new SpeedService<RT>(x, configurationService));
+        .Select(x => new SpeedService<RT>(x, configurationService, eventBus));
 
     public IObservable<Percentage> Battery { get; } = connectionService.BikeMotorConnection
         .Select(x => x.Battery)
@@ -41,13 +43,15 @@ public class DisplayService<RT>(
         .CombineLatest(configurationService.Bike.Select(x => x.MotorVoltage).Distinct())
         .Select(t => t.First * t.Second.Value);
 
-    public IObservable<Option<RotationalSpeed>> RotationalSpeed { get; } = connectionService.BikeMotorConnection
-        .Select(x => x.RotationalSpeed.Select(x => x.ToOption()))
-        .Switch();
+    public IObservable<WheelRotationalSpeed> RotationalSpeed { get; } = eventBus
+        .GetStream<WheelRotationalSpeed>();
 
-    public IObservable<Option<Speed>> Speed => speedService
-        .Select(x => x.Speed.Select(x => x.ToOption()))
-        .Switch();
+    // public IObservable<BikeSpeed> Speed { get; } = eventBus
+    //     .GetStream<BikeSpeed>();
+    public IObservable<BikeSpeed> Speed => speedService
+        .Select(x => x.Speed)
+        .Switch()
+        .Select(x => BikeSpeed.From((Speed) x));
 
     public void Connect() => connectionService.BikeMotorConnection.Connect();
 

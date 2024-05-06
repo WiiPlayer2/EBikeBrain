@@ -17,7 +17,7 @@
         <Button Content="Disconnect" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                 Command="{Binding DisconnectCommand}" />
         <Label HorizontalAlignment="Center" Content="km/h" FontSize="30" />
-        <Label HorizontalAlignment="Center" Content="{Binding Speed.Value}" FontSize="120" />
+        <Label HorizontalAlignment="Center" Content="{Binding Speed^}" FontSize="120" />
         <Grid ColumnDefinitions="*,*,*">
             <Grid.Resources>
                 <sys:Double x:Key="TitleFontSize">12</sys:Double>

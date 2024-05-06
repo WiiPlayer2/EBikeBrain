@@ -14,9 +14,9 @@ public class DisplayViewModel : ViewModelBase, IDisposable
 
     public DisplayViewModel(DisplayService<Runtime> displayService)
     {
-        Speed = displayService.Speed.StartWith(None)
-            .Select(x => x.Match(x => x.KilometersPerHour.ToString("0.0"), "---"))
-            .ToReadOnlyReactiveProperty();
+        Speed = displayService.Speed
+            .Select(x => x.Value.KilometersPerHour.ToString("0.0"))
+            .StartWith("---");
         PasLevel = displayService.PasLevel.StartWith(None)
             .Select(x => x.Match(x => x switch
             {
@@ -33,10 +33,9 @@ public class DisplayViewModel : ViewModelBase, IDisposable
                 Pas.Unknown => "PAS ?",
                 _ => x.ToString(),
             }, () => "PAS -"));
-        RotationsPerMinute = displayService.RotationalSpeed.StartWith(None)
-            .Select(x => x.Match(
-                x => x.RevolutionsPerMinute.ToString("0"),
-                () => "---"));
+        RotationsPerMinute = displayService.RotationalSpeed
+            .Select(x => x.Value.RevolutionsPerMinute.ToString("0"))
+            .StartWith("---");
         Power = displayService.Power
             .Select(x => x.Watts.ToString("0.0"))
             .StartWith("---");
@@ -44,7 +43,7 @@ public class DisplayViewModel : ViewModelBase, IDisposable
             .Select(x => $"{x}%")
             .StartWith("---");
         LogOutput = displayService.LogEntries
-            .Select(x => string.Join("\n", x));
+            .Select(x => string.Join("\n", x.Reverse()));
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
         DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);
@@ -67,7 +66,7 @@ public class DisplayViewModel : ViewModelBase, IDisposable
 
     public IObservable<string> RotationsPerMinute { get; }
 
-    public ReadOnlyReactiveProperty<string> Speed { get; }
+    public IObservable<string> Speed { get; }
 
     public void Dispose()
     {

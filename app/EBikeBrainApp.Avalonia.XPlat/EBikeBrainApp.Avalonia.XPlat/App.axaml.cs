@@ -21,6 +21,7 @@ public class App : AvaloniaApp
     public override void OnFrameworkInitializationCompleted()
     {
         var serviceProvider = BuildServiceProvider();
+        serviceProvider.UseProjections();
         var mainViewModel = serviceProvider.GetRequiredService<MainViewModel>();
 
         switch (ApplicationLifetime)
@@ -52,6 +53,8 @@ public class App : AvaloniaApp
         services.AddDemoImplementations();
         services.AddEBikeBrainApp<Runtime>();
         services.AddEventing();
+
+        // services.AddProjection<BikeConfiguration, RotationalSpeed, Speed, SpeedProjection>();
 
         return services.BuildServiceProvider();
     }

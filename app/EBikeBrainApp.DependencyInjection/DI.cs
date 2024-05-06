@@ -20,7 +20,18 @@ public static class DI
     public static void AddEventing(this IServiceCollection services)
     {
         services.AddSingleton<EventBus>();
+        services.AddSingleton<IEventBus>(sp => sp.GetRequiredService<EventBus>());
         services.AddSingleton(typeof(IEventStream<>), typeof(EventStream<>));
         services.AddSingleton(typeof(ICommandPublisher<>), typeof(CommandPublisher<>));
     }
+
+    public static void AddProjection<T1, T2, TOut, TProjection>(this IServiceCollection services)
+        where T1 : notnull
+        where T2 : notnull
+        where TOut : notnull
+        where TProjection : IEventProjection<T1, T2, TOut> =>
+        services.AddSingleton<IEventProjector, EventProjector<T1, T2, TOut, TProjection>>();
+
+    public static void UseProjections(this IServiceProvider services) =>
+        services.GetServices<IEventProjector>();
 }
