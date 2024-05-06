@@ -5,6 +5,7 @@ using LanguageExt.Effects.Traits;
 
 namespace EBikeBrainApp.Application;
 
+[Obsolete]
 public class ConnectionService<RT>(
     IBikeMotorConnector bikeMotorConnector,
     ConfigurationService configurationService,

@@ -1,4 +1,6 @@
 using System.Reactive.Linq;
+using EBikeBrainApp.Application.Abstractions.Commands;
+using EBikeBrainApp.Application.Abstractions.Events;
 using EBikeBrainApp.Domain.Events;
 using LanguageExt.Effects.Traits;
 
@@ -8,16 +10,15 @@ public class DisplayService<RT>(
     ConnectionService<RT> connectionService,
     ConfigurationService configurationService,
     LogService logService,
-    IEventBus eventBus)
+    IEventBus eventBus,
+    ICommandPublisher<ConnectDevice> connectDevicePublisher)
     where RT : struct, HasCancel<RT>
 {
-    private readonly IObservable<PasService<RT>> pasService = connectionService.BikeMotorConnection
-        .Select(x => new PasService<RT>(x));
+    private readonly IObservable<BikeMotorService<RT>> bikeMotorService = eventBus
+        .GetStream<BikeMotorConnected>()
+        .Select(x => new BikeMotorService<RT>(x.BikeMotor));
 
-    private readonly IObservable<SpeedService<RT>> speedService = connectionService.BikeMotorConnection
-        .Select(x => new SpeedService<RT>(x, configurationService, eventBus));
-
-    public IObservable<Percentage> Battery { get; } = connectionService.BikeMotorConnection
+    public IObservable<Percentage> Battery => bikeMotorService
         .Select(x => x.Battery)
         .Switch();
 
@@ -25,7 +26,7 @@ public class DisplayService<RT>(
 
     public IObservable<bool> CanDisconnectBike => connectionService.CanDisconnect;
 
-    public IObservable<ElectricCurrent> Current { get; } = connectionService.BikeMotorConnection
+    public IObservable<ElectricCurrent> Current => bikeMotorService
         .Select(x => x.Current)
         .Switch();
 
@@ -38,6 +39,9 @@ public class DisplayService<RT>(
     public IObservable<Option<PasLevel>> PasLevel => pasService
         .Select(x => x.Current.Select(x => x.ToOption()))
         .Switch();
+
+    private IObservable<PasService<RT>> pasService => bikeMotorService
+        .Select(x => new PasService<RT>(x));
 
     public IObservable<Power> Power => Current
         .CombineLatest(configurationService.Bike.Select(x => x.MotorVoltage).Distinct())
@@ -53,7 +57,19 @@ public class DisplayService<RT>(
         .Switch()
         .Select(x => BikeSpeed.From((Speed) x));
 
-    public void Connect() => connectionService.BikeMotorConnection.Connect();
+    private IObservable<SpeedService<RT>> speedService => bikeMotorService
+        .Select(x => new SpeedService<RT>(x, configurationService, eventBus));
+
+    public async void Connect()
+    {
+        var device = await configurationService.Connection
+            .SelectMany(x => x.Device)
+            .FirstOrDefaultAsync();
+        if (device is null)
+            return;
+
+        await connectDevicePublisher.Publish(new ConnectDevice(device));
+    }
 
     public void Disconnect() => throw new NotImplementedException();
 }

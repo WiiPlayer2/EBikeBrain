@@ -21,7 +21,7 @@ public class App : AvaloniaApp
     public override void OnFrameworkInitializationCompleted()
     {
         var serviceProvider = BuildServiceProvider();
-        serviceProvider.UseProjections();
+        serviceProvider.UseEventing();
         var mainViewModel = serviceProvider.GetRequiredService<MainViewModel>();
 
         switch (ApplicationLifetime)
