@@ -5,6 +5,7 @@ using LanguageExt.Effects.Traits;
 
 namespace EBikeBrainApp.Application;
 
+[Obsolete]
 public class PasService<RT> : IDisposable
     where RT : struct, HasCancel<RT>
 {
