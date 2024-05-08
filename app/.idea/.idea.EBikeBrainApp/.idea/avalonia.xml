@@ -3,6 +3,12 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/Card.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
+        <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/ConnectCard.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
+        <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/LogCard.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
+        <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/SpeedCard.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
+        <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Controls/CardGrid.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
+        <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/DemoCardsView.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
         <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/DisplayView.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
         <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/MainView.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
         <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/MainWindow.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />

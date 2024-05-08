@@ -14,6 +14,9 @@
     </Design.DataContext>
 
     <TabControl Margin="5" TabStripPlacement="Bottom">
+        <TabItem Header="Cards">
+            <views:DemoCardsView DataContext="{Binding DemoCards}" />
+        </TabItem>
         <TabItem Header="Display">
             <views:DisplayView DataContext="{Binding Display}" />
         </TabItem>
