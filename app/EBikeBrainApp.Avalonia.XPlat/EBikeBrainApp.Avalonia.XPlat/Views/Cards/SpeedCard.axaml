@@ -8,11 +8,11 @@
         x:Class="EBikeBrainApp.Avalonia.XPlat.Views.Cards.SpeedCard"
         x:DataType="vm:SpeedCardViewModel">
     <Grid RowDefinitions="*,Auto">
-        <TextBlock Grid.Row="0"
-                   Text="{Binding Value^}"
-                   FontSize="30"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
+        <Viewbox Grid.Row="0">
+            <TextBlock Text="{Binding Value^}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+        </Viewbox>
         <TextBlock Grid.Row="1"
                    Text="km/h"
                    HorizontalAlignment="Center" />
