@@ -14,6 +14,7 @@ public class DemoBikeMotorConnector : IBikeMotorConnector
     {
         await busy.Run(() => Task.Delay(1.Seconds(), cancellationToken), cancellationToken);
 
+        throw new Exception();
         var stream = typeof(DemoBikeMotorConnector).Assembly.GetManifestResourceStream("EBikeBrainApp.Implementations.Demo.demo.log") ?? throw new InvalidOperationException();
         return new ProtocolInterceptorBikeMotor(new SlowStream(stream, 1.Milliseconds()));
     }
