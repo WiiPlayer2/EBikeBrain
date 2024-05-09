@@ -7,7 +7,7 @@ using Java.Util;
 
 namespace EBikeBrainApp.Implementations.Android;
 
-public class AndroidBikeMotorConnector(BluetoothAdapter bluetoothAdapter) : IBikeMotorConnector, IDisposable
+public class AndroidBikeMotorConnector(BluetoothAdapter bluetoothAdapter, IEventStream<LogEntry> logs) : IBikeMotorConnector, IDisposable
 {
     private static readonly UUID RF_COMM_UUID = UUID.FromString("00001101-0000-1000-8000-00805F9B34FB")!;
 
@@ -24,7 +24,7 @@ public class AndroidBikeMotorConnector(BluetoothAdapter bluetoothAdapter) : IBik
             throw new InvalidOperationException("Failed to create RFcomm socket.");
 
         await socket.ConnectAsync();
-        var bikeMotor = new ProtocolInterceptorBikeMotor(socket.InputStream!);
+        var bikeMotor = new ProtocolInterceptorBikeMotor(socket.InputStream!, logs);
         return bikeMotor;
     }, cancellationToken), cancellationToken);
 

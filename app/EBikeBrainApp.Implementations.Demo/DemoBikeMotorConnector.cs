@@ -6,7 +6,7 @@ using LanguageExt.UnitsOfMeasure;
 
 namespace EBikeBrainApp.Implementations.Demo;
 
-public class DemoBikeMotorConnector : IBikeMotorConnector
+public class DemoBikeMotorConnector(IEventStream<LogEntry> logs) : IBikeMotorConnector
 {
     private readonly Busy busy = new();
 
@@ -17,7 +17,7 @@ public class DemoBikeMotorConnector : IBikeMotorConnector
         // throw new Exception();
 
         var stream = typeof(DemoBikeMotorConnector).Assembly.GetManifestResourceStream("EBikeBrainApp.Implementations.Demo.demo.log") ?? throw new InvalidOperationException();
-        return new ProtocolInterceptorBikeMotor(new SlowStream(stream, 1.Milliseconds()));
+        return new ProtocolInterceptorBikeMotor(new SlowStream(stream, 1.Milliseconds()), logs);
     }
 
     public IObservable<bool> IsBusy => busy.IsBusy;

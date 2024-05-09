@@ -15,27 +15,38 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
     private readonly IDisposable connection;
 
-    public ProtocolInterceptorBikeMotor(Stream inputStream)
+    public ProtocolInterceptorBikeMotor(Stream inputStream, IEventStream<LogEntry> logs)
     {
         var interceptedLines = Observable.Create<string>(async (observer, token) =>
             {
                 using var reader = new StreamReader(inputStream);
 
+                var buffer = new char[16];
+
                 var text = string.Empty;
+                logs.Publish(LogEntry.From("[[DEBUG CONNECTION]]"));
                 while (!token.IsCancellationRequested)
                 {
-                    text += await reader.ReadToEndAsync(token);
+                    var readCount = await reader.ReadBlockAsync(buffer, token);
+                    text += new string(buffer, 0, readCount);
 
                     int newLineIndex;
                     while ((newLineIndex = text.IndexOf('\n')) >= 0)
                     {
                         var line = text[..newLineIndex];
-                        observer.OnNext(line);
+
+                        // HACK: idk why but apparently this sometimes locks up on android if run synchronously (even if awaited)
+                        Task.Run(() => observer.OnNext(line.Trim()), token);
+
                         text = text[(newLineIndex + 1)..];
                     }
                 }
             })
-            .Do(line => Debug.WriteLine(line))
+            .Do(line =>
+            {
+                Debug.WriteLine(line);
+                logs.Publish(LogEntry.From($"{{{{{line}}}}}"));
+            })
             .Publish();
 
         IObservable<(byte[] Request, byte[] Response)> messages = interceptedLines
