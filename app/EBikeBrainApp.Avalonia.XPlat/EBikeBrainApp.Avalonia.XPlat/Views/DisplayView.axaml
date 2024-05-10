@@ -47,7 +47,9 @@
             <Button Grid.Row="1" Grid.Column="1" Content="-" FontSize="80" HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center" />
         </Grid>
-        <TextBlock Text="{Binding LogOutput^}"
-                   TextWrapping="Wrap" />
+        <TextBox Text="{Binding LogOutput^}"
+                 TextWrapping="Wrap"
+                 IsReadOnly="True"
+                 MaxHeight="180" />
     </StackPanel>
 </UserControl>

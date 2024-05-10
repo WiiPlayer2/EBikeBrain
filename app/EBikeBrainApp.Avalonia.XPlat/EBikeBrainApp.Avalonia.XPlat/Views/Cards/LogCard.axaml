@@ -7,8 +7,9 @@
         mc:Ignorable="d"
         x:Class="EBikeBrainApp.Avalonia.XPlat.Views.Cards.LogCard"
         x:DataType="vm:LogCardViewModel">
-    <TextBlock Text="{Binding Text^}"
-               TextWrapping="Wrap"
-               HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch" />
+    <TextBox Text="{Binding Text^}"
+             TextWrapping="Wrap"
+             IsReadOnly="True"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch" />
 </v:Card>
