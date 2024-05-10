@@ -43,6 +43,7 @@ public class ConfigurationService : IDisposable
         var internalSubject = new Subject<T>();
         var observable = Observable
             .FromAsync(configurationStore.Load)
+            .Catch(Observable.Return(Option<T>.None)) // The exception should maybe be logged
             .Select(x => x.IfNone(getDefault))
             .Concat(internalSubject);
         var subject = Subject.Create<T>(internalSubject, observable);
