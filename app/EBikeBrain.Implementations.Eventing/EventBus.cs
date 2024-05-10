@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using EBikeBrainApp.Application.Abstractions;
+using EBikeBrainApp.Application.Abstractions.Events;
 
 namespace EBikeBrain.Implementations.Eventing;
 
@@ -19,7 +20,10 @@ public class EventBus : IEventBus, ISubject<object>, IDisposable
 
     public void AddStream<T>(IObservable<T> stream)
         where T : notnull =>
-        streamSubscriptions.Add(stream.Subscribe(x => OnNext(x)));
+        streamSubscriptions.Add(stream.Subscribe(
+            x => OnNext(x),
+            e => OnNext(new EventStreamError<T>(e)),
+            () => OnNext(new EventStreamCompleted<T>())));
 
     public IObservable<T> GetStream<T>()
         where T : notnull =>
