@@ -15,7 +15,7 @@ public class CommandPublisher<T>(ICommandHandler<T> commandHandler, ILogger<Comm
         }
         catch (Exception e)
         {
-            logger.LogError(e, "!! {command} -> {error}", command, e.Message);
+            logger.LogError(e, "!! {command} -> {errorType}: {errorMessage}", command, e.GetType().FullName, e.Message);
         }
     }
 }
