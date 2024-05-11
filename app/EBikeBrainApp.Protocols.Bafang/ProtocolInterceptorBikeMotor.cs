@@ -60,13 +60,21 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     return (false, data);
                 }
 
-                byte[] GetData(string tagLine) => line
-                    .Substring(tagLine.Length)
-                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => byte.Parse(s, NumberStyles.HexNumber))
-                    .ToArray();
-
                 throw new InvalidOperationException($"Unable to parse line \"{line}\"");
+
+                byte[] GetData(string tagLine) => line[tagLine.Length..]
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s =>
+                    {
+                        if (byte.TryParse(s, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var value))
+                            return value;
+
+                        logger.LogWarning("Failed to parse \"{line}\" with tag line \"{tagLine}\".", line, tagLine);
+                        return default(byte?);
+                    })
+                    .Where(x => x is not null)
+                    .Select(x => x!.Value)
+                    .ToArray();
             })
             .SkipWhile(t => !t.Item1)
             .Buffer(2)
