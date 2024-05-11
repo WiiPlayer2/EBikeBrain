@@ -44,7 +44,8 @@ public class DisplayViewModel : ViewModelBase, IDisposable
             .Select(x => $"{x}%")
             .StartWith("---");
         LogOutput = displayService.LogEntries
-            .Select(x => string.Join("\n", x.Reverse()));
+            .Select(x => string.Join("\n", x.Reverse()
+                .Select(x => $"[{x.Level.ToString()[0]}] {(x.CategoryName.Length > 20 ? x.CategoryName[^20..] : x.CategoryName)}: {x.Message}")));
 
         ConnectCommand = new ReactiveCommand<object?>(displayService.CanConnectBike);
         DisconnectCommand = new ReactiveCommand<object?>(displayService.CanDisconnectBike);

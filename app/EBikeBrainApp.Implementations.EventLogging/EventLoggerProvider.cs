@@ -1,5 +1,5 @@
 using EBikeBrainApp.Application.Abstractions;
-using EBikeBrainApp.Domain;
+using EBikeBrainApp.Application.Abstractions.Events;
 using Microsoft.Extensions.Logging;
 
 namespace EBikeBrainApp.Implementations.EventLogging;

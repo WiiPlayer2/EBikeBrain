@@ -1,5 +1,6 @@
 using EBikeBrainApp.Application.Abstractions;
-using EBikeBrainApp.Domain;
+using EBikeBrainApp.Application.Abstractions.Events;
+using LanguageExt;
 using Microsoft.Extensions.Logging;
 
 namespace EBikeBrainApp.Implementations.EventLogging;
@@ -12,6 +13,11 @@ public class EventLogger(IEventStream<LogEntry> logStream, string categoryName) 
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
-        logStream.Publish(LogEntry.From($"[{logLevel}] {categoryName}: {formatter(state, exception)}"));
+        // logStream.Publish(LogEntry.From($"[{logLevel}] {categoryName}: {formatter(state, exception)}"));
+        logStream.Publish(new LogEntry(
+            logLevel,
+            categoryName,
+            Prelude.Optional(exception),
+            formatter(state, exception)));
     }
 }

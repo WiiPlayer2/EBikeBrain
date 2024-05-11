@@ -1,4 +1,5 @@
 using System.Reactive.Linq;
+using EBikeBrainApp.Application.Abstractions.Events;
 using Microsoft.Extensions.Logging;
 
 namespace EBikeBrainApp.Application;

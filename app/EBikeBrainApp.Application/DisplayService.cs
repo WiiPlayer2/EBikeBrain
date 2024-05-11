@@ -1,5 +1,6 @@
 using System.Reactive.Linq;
 using EBikeBrainApp.Application.Abstractions.Commands;
+using EBikeBrainApp.Application.Abstractions.Events;
 using EBikeBrainApp.Domain.Events;
 using LanguageExt.Effects.Traits;
 
