@@ -45,7 +45,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
             .Do(line => { logger.LogTrace("{{{{{line}}}}}", line); })
             .Publish();
 
-        IObservable<(byte[] Request, byte[] Response)> messages = interceptedLines
+        var messages = interceptedLines
             .Select(line =>
             {
                 if (line.StartsWith(TAG_DISPLAY_TO_MOTOR))
@@ -77,10 +77,12 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     .Select(x => x!.Value)
                     .ToArray();
             })
-            .SkipWhile(t => t.Item1 != true)
+            .Where(x => x.isRequest.HasValue)
+            .Select(t => (isRequest: t.isRequest!.Value, data: t.data!))
+            .SkipWhile(t => !t.isRequest)
             .Buffer(2)
             .Where(x => x.Count >= 2)
-            .Select(l => (l[0].data!, l[1].data!));
+            .Select(l => (Request: l[0].data, Response: l[1].data));
 
         RotationalSpeed = messages
             .Where(t => IsRequest(t.Request, 0x11, 0x20))
