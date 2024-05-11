@@ -51,16 +51,17 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                 if (line.StartsWith(TAG_DISPLAY_TO_MOTOR))
                 {
                     var data = GetData(TAG_DISPLAY_TO_MOTOR);
-                    return (true, data);
+                    return (isRequest: true, data);
                 }
 
                 if (line.StartsWith(TAG_MOTOR_TO_DISPLAY))
                 {
                     var data = GetData(TAG_MOTOR_TO_DISPLAY);
-                    return (false, data);
+                    return (isRequest: false, data);
                 }
 
-                throw new InvalidOperationException($"Unable to parse line \"{line}\"");
+                logger.LogWarning("Unable to parse line \"{line}\".", line);
+                return (isRequest: default(bool?), data: default(byte[]));
 
                 byte[] GetData(string tagLine) => line[tagLine.Length..]
                     .Split(' ', StringSplitOptions.RemoveEmptyEntries)
@@ -76,9 +77,9 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     .Select(x => x!.Value)
                     .ToArray();
             })
-            .SkipWhile(t => !t.Item1)
+            .SkipWhile(t => t.Item1 != true)
             .Buffer(2)
-            .Select(l => (l[0].data, l[1].data));
+            .Select(l => (l[0].data!, l[1].data!));
 
         RotationalSpeed = messages
             .Where(t => IsRequest(t.Request, 0x11, 0x20))
