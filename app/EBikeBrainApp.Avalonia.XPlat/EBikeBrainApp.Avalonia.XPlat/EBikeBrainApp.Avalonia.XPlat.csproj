@@ -19,11 +19,13 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="LanguageExt.Sys" Version="4.4.8"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0"/>
         <PackageReference Include="ReactiveProperty" Version="9.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\EBikeBrainApp.DependencyInjection\EBikeBrainApp.DependencyInjection.csproj"/>
         <ProjectReference Include="..\..\EBikeBrainApp.Implementations.Demo\EBikeBrainApp.Implementations.Demo.csproj"/>
+        <ProjectReference Include="..\..\EBikeBrainApp.Implementations.EventLogging\EBikeBrainApp.Implementations.EventLogging.csproj"/>
     </ItemGroup>
 </Project>

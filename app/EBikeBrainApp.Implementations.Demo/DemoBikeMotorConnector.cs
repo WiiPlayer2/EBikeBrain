@@ -3,10 +3,11 @@ using EBikeBrainApp.Domain;
 using EBikeBrainApp.Protocols.Bafang;
 using EBikeBrainApp.Utils;
 using LanguageExt.UnitsOfMeasure;
+using Microsoft.Extensions.Logging;
 
 namespace EBikeBrainApp.Implementations.Demo;
 
-public class DemoBikeMotorConnector(IEventStream<LogEntry> logs) : IBikeMotorConnector
+public class DemoBikeMotorConnector(ILogger<ProtocolInterceptorBikeMotor> logger) : IBikeMotorConnector
 {
     private readonly Busy busy = new();
 
@@ -17,7 +18,7 @@ public class DemoBikeMotorConnector(IEventStream<LogEntry> logs) : IBikeMotorCon
         // throw new Exception();
 
         var stream = typeof(DemoBikeMotorConnector).Assembly.GetManifestResourceStream("EBikeBrainApp.Implementations.Demo.demo.log") ?? throw new InvalidOperationException();
-        return new ProtocolInterceptorBikeMotor(new SlowStream(stream, 1.Milliseconds()), logs);
+        return new ProtocolInterceptorBikeMotor(new SlowStream(stream, 1.Milliseconds()), logger);
     }
 
     public IObservable<bool> IsBusy => busy.IsBusy;

@@ -5,8 +5,10 @@ using EBikeBrainApp.Avalonia.XPlat.ViewModels;
 using EBikeBrainApp.Avalonia.XPlat.Views;
 using EBikeBrainApp.DependencyInjection;
 using EBikeBrainApp.Implementations.Demo;
+using EBikeBrainApp.Implementations.EventLogging;
 using LanguageExt.Sys.Live;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using AvaloniaApp = Avalonia.Application;
 
 namespace EBikeBrainApp.Avalonia.XPlat;
@@ -53,6 +55,11 @@ public class App : AvaloniaApp
         services.AddDemoImplementations();
         services.AddEBikeBrainApp<Runtime>();
         services.AddEventing();
+        services.AddLogging(builder =>
+        {
+            builder.SetMinimumLevel(LogLevel.Trace);
+            builder.AddEventLogging();
+        });
 
         // services.AddProjection<BikeConfiguration, RotationalSpeed, Speed, SpeedProjection>();
 

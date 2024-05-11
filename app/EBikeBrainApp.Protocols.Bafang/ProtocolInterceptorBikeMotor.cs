@@ -1,8 +1,8 @@
-using System.Diagnostics;
 using System.Globalization;
 using System.Reactive.Linq;
 using EBikeBrainApp.Application.Abstractions;
 using EBikeBrainApp.Domain;
+using Microsoft.Extensions.Logging;
 using UnitsNet;
 
 namespace EBikeBrainApp.Protocols.Bafang;
@@ -15,7 +15,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
     private readonly IDisposable connection;
 
-    public ProtocolInterceptorBikeMotor(Stream inputStream, IEventStream<LogEntry> logs)
+    public ProtocolInterceptorBikeMotor(Stream inputStream, ILogger<ProtocolInterceptorBikeMotor> logger)
     {
         var interceptedLines = Observable.Create<string>(async (observer, token) =>
             {
@@ -24,7 +24,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                 var buffer = new char[16];
 
                 var text = string.Empty;
-                logs.Publish(LogEntry.From("[[DEBUG CONNECTION]]"));
+                logger.LogTrace("Starting protocol interception...");
                 while (!token.IsCancellationRequested)
                 {
                     var readCount = await reader.ReadBlockAsync(buffer, token);
@@ -42,11 +42,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     }
                 }
             })
-            .Do(line =>
-            {
-                Debug.WriteLine(line);
-                logs.Publish(LogEntry.From($"{{{{{line}}}}}"));
-            })
+            .Do(line => { logger.LogTrace("{{{{{line}}}}}", line); })
             .Publish();
 
         IObservable<(byte[] Request, byte[] Response)> messages = interceptedLines

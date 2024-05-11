@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrain.Implementations.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp.Implementations.JsonConfigurationStore", "EBikeBrainApp.Implementations.JsonConfigurationStore\EBikeBrainApp.Implementations.JsonConfigurationStore.csproj", "{4ED9FECE-9569-45DE-9AE4-EFD9F2143E4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBikeBrainApp.Implementations.EventLogging", "EBikeBrainApp.Implementations.EventLogging\EBikeBrainApp.Implementations.EventLogging.csproj", "{812E1193-BA88-4AD0-AC32-92B5872C62F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,10 @@ Global
 		{4ED9FECE-9569-45DE-9AE4-EFD9F2143E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ED9FECE-9569-45DE-9AE4-EFD9F2143E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ED9FECE-9569-45DE-9AE4-EFD9F2143E4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{812E1193-BA88-4AD0-AC32-92B5872C62F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{812E1193-BA88-4AD0-AC32-92B5872C62F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{812E1193-BA88-4AD0-AC32-92B5872C62F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{812E1193-BA88-4AD0-AC32-92B5872C62F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,5 +159,6 @@ Global
 		{25537E88-A078-4FC1-B710-820AD1E34607} = {3973967D-D61A-413C-8BDB-1502C81004BA}
 		{7BC547C1-E36F-495F-B692-7E9863DCCDF9} = {3973967D-D61A-413C-8BDB-1502C81004BA}
 		{4ED9FECE-9569-45DE-9AE4-EFD9F2143E4B} = {3973967D-D61A-413C-8BDB-1502C81004BA}
+		{812E1193-BA88-4AD0-AC32-92B5872C62F3} = {3973967D-D61A-413C-8BDB-1502C81004BA}
 	EndGlobalSection
 EndGlobal
