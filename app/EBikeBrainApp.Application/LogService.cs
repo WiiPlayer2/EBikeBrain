@@ -12,11 +12,10 @@ public class LogService : IDisposable
 
     private readonly CompositeDisposable subscriptions;
 
-    public LogService(IEventStream<object> events)
+    public LogService(IEventStream<LogEntry> logs)
     {
         subscriptions = new CompositeDisposable(
-            events
-                .Select(x => LogEntry.From(x.ToString()))
+            logs
                 .Scan(
                     List<LogEntry>(),
                     (acc, cur) => toList(acc.Add(cur).TakeLast(MAX_LOG_ENTRY_COUNT)))

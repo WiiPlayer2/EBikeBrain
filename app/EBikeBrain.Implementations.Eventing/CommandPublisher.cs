@@ -1,21 +1,21 @@
 using EBikeBrainApp.Application.Abstractions;
-using EBikeBrainApp.Domain;
+using Microsoft.Extensions.Logging;
 
 namespace EBikeBrain.Implementations.Eventing;
 
-public class CommandPublisher<T>(ICommandHandler<T> commandHandler, IEventStream<LogEntry> logs) : ICommandPublisher<T>
+public class CommandPublisher<T>(ICommandHandler<T> commandHandler, ILogger<CommandPublisher<T>> logger) : ICommandPublisher<T>
     where T : notnull
 {
     public async Task Publish(T command)
     {
-        logs.Publish(LogEntry.From($">> {command}"));
+        logger.LogTrace(">> {command}", command);
         try
         {
             await commandHandler.ExecuteAsync(command);
         }
         catch (Exception e)
         {
-            logs.Publish(LogEntry.From($"!! {command} -> {e}"));
+            logger.LogError(e, "!! {command} -> {error}", command, e.Message);
         }
     }
 }
