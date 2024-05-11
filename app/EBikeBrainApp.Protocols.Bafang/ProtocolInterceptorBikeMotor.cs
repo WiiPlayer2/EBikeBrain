@@ -79,6 +79,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
             })
             .SkipWhile(t => t.Item1 != true)
             .Buffer(2)
+            .Where(x => x.Count >= 2)
             .Select(l => (l[0].data!, l[1].data!));
 
         RotationalSpeed = messages
