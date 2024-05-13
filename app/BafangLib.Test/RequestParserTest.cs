@@ -39,7 +39,7 @@ public class RequestParserTest
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x11, 0x11];
-        var expectedResult = new ParseResult<Request>(new GetBatteryRequest(), 2);
+        var expectedResult = new ParseResult<Request>(new GetBatteryRequest(), 0, 2);
 
         // Act
         var result = RequestParser.Parse(buffer);
@@ -53,7 +53,7 @@ public class RequestParserTest
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x11, 0x0A];
-        var expectedResult = new ParseResult<Request>(new GetCurrentRequest(), 2);
+        var expectedResult = new ParseResult<Request>(new GetCurrentRequest(), 0, 2);
 
         // Act
         var result = RequestParser.Parse(buffer);
@@ -67,7 +67,7 @@ public class RequestParserTest
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x11, 0x20];
-        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), 2);
+        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), 0, 2);
 
         // Act
         var result = RequestParser.Parse(buffer);
@@ -83,7 +83,7 @@ public class RequestParserTest
         ReadOnlySpan<byte> buffer = [0x00, 0x11, 0x20];
         var offset = 1;
         var length = buffer.Length - offset;
-        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), offset + 2);
+        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), offset, 2);
 
         // Act
         var result = RequestParser.Parse(buffer, offset, length);
@@ -97,7 +97,7 @@ public class RequestParserTest
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x00, 0x11, 0x20];
-        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), 3);
+        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), 1, 2);
 
         // Act
         var result = RequestParser.Parse(buffer);
@@ -111,7 +111,7 @@ public class RequestParserTest
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x16, 0x0B, 0x17];
-        var expectedResult = new ParseResult<Request>(new SetPasRequest(Pas.Level8), 3);
+        var expectedResult = new ParseResult<Request>(new SetPasRequest(Pas.Level8), 0, 3);
 
         // Act
         var result = RequestParser.Parse(buffer);

@@ -24,17 +24,17 @@ public static class RequestParser
                 var c = buffer[offset + 2];
 
                 if (a == 0x16 && b == 0x0B)
-                    return new ParseResult<Request>(new SetPasRequest((Pas) c), offset + 3);
+                    return new ParseResult<Request>(new SetPasRequest((Pas) c), offset, 3);
             }
 
             if (a == 0x11 && b == 0x20)
-                return new ParseResult<Request>(new GetRpmRequest(), offset + 2);
+                return new ParseResult<Request>(new GetRpmRequest(), offset, 2);
 
             if (a == 0x11 && b == 0x0A)
-                return new ParseResult<Request>(new GetCurrentRequest(), offset + 2);
+                return new ParseResult<Request>(new GetCurrentRequest(), offset, 2);
 
             if (a == 0x11 && b == 0x11)
-                return new ParseResult<Request>(new GetBatteryRequest(), offset + 2);
+                return new ParseResult<Request>(new GetBatteryRequest(), offset, 2);
 
             offset += 1;
             length -= 1;
@@ -44,4 +44,4 @@ public static class RequestParser
     }
 }
 
-public record ParseResult<T>(T Value, int EndOffset);
+public record ParseResult<T>(T Value, int Offset, int Length);
