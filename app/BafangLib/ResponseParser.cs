@@ -15,6 +15,24 @@ public static class ResponseParser
     public static ParseResult<ushort>? ParseGetRpmResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
         ParseUInt16(buffer, offset, length);
 
+    public static ParseResult<ReadOnlyMemory<byte>>? ParseUnknownResponse(ReadOnlySpan<byte> buffer, int offset, int length)
+    {
+        for (var i = 1; i < length; i++)
+        {
+            var calculatedChecksum = Checksum.Calculate(buffer, offset, i);
+            var sentChecksum = buffer[offset + i];
+
+            if (calculatedChecksum == sentChecksum)
+                return new ParseResult<ReadOnlyMemory<byte>>(
+                    buffer.Slice(offset, i).ToArray(),
+                    offset,
+                    i,
+                    sentChecksum);
+        }
+
+        return null;
+    }
+
     private static ParseResult<ushort>? ParseUInt16(ReadOnlySpan<byte> buffer, int offset, int length) =>
         length < 3
             ? null

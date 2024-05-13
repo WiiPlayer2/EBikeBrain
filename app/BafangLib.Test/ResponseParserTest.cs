@@ -46,4 +46,22 @@ public class ResponseParserTest
         // Assert
         result.Should().Be(expectedResult);
     }
+
+    [TestMethod]
+    public void ParseUnknownResponse_WithUnknownResponseAndValidChecksum_ReturnsUnknownValue()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x01, 0x03, 0x03, 0x07];
+        var expectedResult = new ParseResult<ReadOnlyMemory<byte>>(new byte[] {0x01, 0x03, 0x03}, 0, 3, 0x07);
+
+        // Act
+        var result = ResponseParser.ParseUnknownResponse(buffer, 0, 4);
+
+        // Assert
+        result.Should().BeEquivalentTo(
+            expectedResult,
+            options => options.Excluding(x => x.Value));
+        result!.Value.ToArray().Should().Equal(
+            expectedResult.Value.ToArray());
+    }
 }
