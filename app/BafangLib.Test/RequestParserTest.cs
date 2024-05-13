@@ -65,6 +65,20 @@ public class RequestParserTest
     }
 
     [TestMethod]
+    public void Parse_WithGetRpmCommandAndImplicitOffset_ReturnsGetRpmRequestAndEndOffset()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x00, 0x11, 0x20];
+        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), 3);
+
+        // Act
+        var result = RequestParser.Parse(buffer);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
     public void Parse_WithTooSmallBuffer_ReturnsNull()
     {
         // Arrange

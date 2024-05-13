@@ -10,13 +10,17 @@ public static class RequestParser
 
     public static ParseResult<Request>? Parse(ReadOnlySpan<byte> buffer, int offset, int length)
     {
-        if (length < 2)
-            return null;
+        while (true)
+        {
+            if (length < 2)
+                return null;
 
-        if (buffer[offset] == 0x11 && buffer[offset + 1] == 0x20)
-            return new ParseResult<Request>(new GetRpmRequest(), offset + 2);
+            if (buffer[offset] == 0x11 && buffer[offset + 1] == 0x20)
+                return new ParseResult<Request>(new GetRpmRequest(), offset + 2);
 
-        return null;
+            offset += 1;
+            length -= 1;
+        }
     }
 }
 
