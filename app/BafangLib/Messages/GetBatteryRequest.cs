@@ -2,4 +2,4 @@ using System;
 
 namespace BafangLib.Messages;
 
-public record GetRpmRequest : Request;
+public record GetBatteryRequest : Request;
