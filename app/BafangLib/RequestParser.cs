@@ -19,12 +19,13 @@ public static class RequestParser
             var a = buffer[offset];
             var b = buffer[offset + 1];
 
-            if (length >= 3)
+            if (length >= 4)
             {
                 var c = buffer[offset + 2];
+                var d = buffer[offset + 3];
 
                 if (a == 0x16 && b == 0x0B)
-                    return new ParseResult<Request>(new SetPasRequest((Pas) c), offset, 3);
+                    return new ParseResult<Request>(new SetPasRequest((Pas) c), offset, 3, d);
             }
 
             if (a == 0x11 && b == 0x20)
@@ -43,5 +44,3 @@ public static class RequestParser
         return null;
     }
 }
-
-public record ParseResult<T>(T Value, int Offset, int Length);

@@ -110,8 +110,8 @@ public class RequestParserTest
     public void Parse_WithSetPasCommand_ReturnsSetPasRequest()
     {
         // Arrange
-        ReadOnlySpan<byte> buffer = [0x16, 0x0B, 0x17];
-        var expectedResult = new ParseResult<Request>(new SetPasRequest(Pas.Level8), 0, 3);
+        ReadOnlySpan<byte> buffer = [0x16, 0x0B, 0x17, 0x38];
+        var expectedResult = new ParseResult<Request>(new SetPasRequest(Pas.Level8), 0, 3, 0x38);
 
         // Act
         var result = RequestParser.Parse(buffer);
