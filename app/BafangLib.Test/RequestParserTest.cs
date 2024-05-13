@@ -1,3 +1,4 @@
+using BafangLib.Messages;
 using FluentAssertions;
 
 namespace BafangLib.Test;
@@ -16,6 +17,20 @@ public class RequestParserTest
 
         // Assert
         result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void Parse_WithGetRpmCommand_ReturnsGetRpmRequestAndConsumeAmount()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x11, 0x20];
+        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), 2);
+
+        // Act
+        var result = RequestParser.Parse(buffer);
+
+        // Assert
+        result.Should().Be(expectedResult);
     }
 
     [TestMethod]
