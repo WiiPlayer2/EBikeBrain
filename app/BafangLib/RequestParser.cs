@@ -5,13 +5,16 @@ namespace BafangLib;
 
 public static class RequestParser
 {
-    public static ParseResult<Request>? Parse(ReadOnlySpan<byte> buffer)
+    public static ParseResult<Request>? Parse(ReadOnlySpan<byte> buffer) =>
+        Parse(buffer, 0, buffer.Length);
+
+    public static ParseResult<Request>? Parse(ReadOnlySpan<byte> buffer, int offset, int length)
     {
-        if (buffer.Length < 2)
+        if (length < 2)
             return null;
 
-        if (buffer[0] == 0x11 && buffer[1] == 0x20)
-            return new ParseResult<Request>(new GetRpmRequest(), 2);
+        if (buffer[offset] == 0x11 && buffer[offset + 1] == 0x20)
+            return new ParseResult<Request>(new GetRpmRequest(), offset + 2);
 
         return null;
     }

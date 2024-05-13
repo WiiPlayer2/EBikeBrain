@@ -20,7 +20,22 @@ public class RequestParserTest
     }
 
     [TestMethod]
-    public void Parse_WithGetRpmCommand_ReturnsGetRpmRequestAndConsumeAmount()
+    public void Parse_WithExplicitBufferOffsetTooSmall_ReturnsNull()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x00, 0x00, 0x00, 0x00];
+        var offset = buffer.Length;
+        var length = buffer.Length - offset;
+
+        // Act
+        var result = RequestParser.Parse(buffer, offset, length);
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [TestMethod]
+    public void Parse_WithGetRpmCommand_ReturnsGetRpmRequestAndEndOffset()
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x11, 0x20];
@@ -28,6 +43,22 @@ public class RequestParserTest
 
         // Act
         var result = RequestParser.Parse(buffer);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
+    public void Parse_WithGetRpmCommandAndExplicitOffset_ReturnsGetRpmRequestAndEndOffset()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x00, 0x11, 0x20];
+        var offset = 1;
+        var length = buffer.Length - offset;
+        var expectedResult = new ParseResult<Request>(new GetRpmRequest(), offset + 2);
+
+        // Act
+        var result = RequestParser.Parse(buffer, offset, length);
 
         // Assert
         result.Should().Be(expectedResult);
