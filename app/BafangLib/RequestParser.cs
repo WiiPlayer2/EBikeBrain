@@ -16,12 +16,22 @@ public static class RequestParser
     {
         while (length >= MIN_REQUEST_LENGTH)
         {
-            if (length >= 3)
-                if (buffer[offset] == 0x16 && buffer[offset + 1] == 0x0B)
-                    return new ParseResult<Request>(new SetPasRequest((Pas) buffer[offset + 2]), offset + 3);
+            var a = buffer[offset];
+            var b = buffer[offset + 1];
 
-            if (buffer[offset] == 0x11 && buffer[offset + 1] == 0x20)
+            if (length >= 3)
+            {
+                var c = buffer[offset + 2];
+
+                if (a == 0x16 && b == 0x0B)
+                    return new ParseResult<Request>(new SetPasRequest((Pas) c), offset + 3);
+            }
+
+            if (a == 0x11 && b == 0x20)
                 return new ParseResult<Request>(new GetRpmRequest(), offset + 2);
+
+            if (a == 0x11 && b == 0x0A)
+                return new ParseResult<Request>(new GetCurrentRequest(), offset + 2);
 
             offset += 1;
             length -= 1;
