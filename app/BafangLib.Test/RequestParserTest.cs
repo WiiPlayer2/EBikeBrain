@@ -35,6 +35,34 @@ public class RequestParserTest
     }
 
     [TestMethod]
+    public void Parse_WithGetBatteryCommand_ReturnsGetRpmRequestAndEndOffset()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x11, 0x11];
+        var expectedResult = new ParseResult<Request>(new GetBatteryRequest(), 2);
+
+        // Act
+        var result = RequestParser.Parse(buffer);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
+    public void Parse_WithGetCurrentCommand_ReturnsSetPasRequest()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x11, 0x0A];
+        var expectedResult = new ParseResult<Request>(new GetCurrentRequest(), 2);
+
+        // Act
+        var result = RequestParser.Parse(buffer);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
     public void Parse_WithGetRpmCommand_ReturnsGetRpmRequestAndEndOffset()
     {
         // Arrange

@@ -8,6 +8,8 @@ public record GetRpmRequest : Request;
 
 public record GetCurrentRequest : Request;
 
+public record GetBatteryRequest : Request;
+
 public record SetPasRequest(Pas Level) : Request;
 
 public enum Pas : byte
