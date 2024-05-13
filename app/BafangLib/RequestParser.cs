@@ -15,6 +15,10 @@ public static class RequestParser
             if (length < 2)
                 return null;
 
+            if (length >= 3)
+                if (buffer[offset] == 0x16 && buffer[offset + 1] == 0x0B)
+                    return new ParseResult<Request>(new SetPasRequest((Pas) buffer[offset + 2]), offset + 3);
+
             if (buffer[offset] == 0x11 && buffer[offset + 1] == 0x20)
                 return new ParseResult<Request>(new GetRpmRequest(), offset + 2);
 
