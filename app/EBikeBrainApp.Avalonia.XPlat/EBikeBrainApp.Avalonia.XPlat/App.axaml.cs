@@ -57,7 +57,7 @@ public class App : AvaloniaApp
         services.AddEventing();
         services.AddLogging(builder =>
         {
-            builder.SetMinimumLevel(LogLevel.Information);
+            builder.SetMinimumLevel(LogLevel.Debug);
             builder.AddEventLogging();
         });
 

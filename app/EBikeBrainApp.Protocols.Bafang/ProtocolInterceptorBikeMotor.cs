@@ -181,6 +181,22 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                             HandleResponse("GetError", () => ResponseParser.ParseGetErrorResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count), false);
                             break;
 
+                        case SetMaxRpmRequest setMaxRpmRequest:
+                            observer.OnNext(setMaxRpmRequest);
+                            break;
+
+                        case SetLightsRequest setLightsRequest:
+                            observer.OnNext(setLightsRequest);
+                            break;
+
+                        case Unknown_x1122_Request:
+                            logger.LogDebug("Unknown request 0x1122 received.");
+                            break;
+
+                        case Unknown_x11F0_Request:
+                            logger.LogDebug("Unknown request 0x11F0 received.");
+                            break;
+
                         default:
                             logger.LogWarning("Unhandled command: {command}", request.Value);
                             break;
@@ -269,9 +285,15 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
             .OfType<GetCurrentResponse>()
             .Select(x => ElectricCurrent.FromAmperes(x.Amperes));
 
+        var errorLogging = parsedMessages
+            .OfType<GetErrorResponse>()
+            .Where(x => x.Value != ErrorCode.Ok)
+            .Subscribe(x => logger.LogWarning("Received error code {error}", x.Value));
+
         connection = new CompositeDisposable(
             parsedMessages.Connect(),
-            interceptedLines.Connect());
+            interceptedLines.Connect(),
+            errorLogging);
     }
 
     public IObservable<Percentage> Battery { get; }

@@ -64,7 +64,7 @@ public static class RequestParser
                     switch (b)
                     {
                         case 0x22:
-                            return new ParseResult<Request>(new UnknownX1122Request(), offset, 2, c);
+                            return new ParseResult<Request>(new Unknown_x1122_Request(), offset, 2, c);
                     }
                 }
 
@@ -78,6 +78,8 @@ public static class RequestParser
                         return new ParseResult<Request>(new GetBatteryRequest(), offset, 2);
                     case 0x20:
                         return new ParseResult<Request>(new GetRpmRequest(), offset, 2);
+                    case 0xF0:
+                        return new ParseResult<Request>(new Unknown_x11F0_Request(), offset, 2);
                 }
             }
 
