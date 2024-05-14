@@ -63,6 +63,20 @@ public class RequestParserTest
     }
 
     [TestMethod]
+    public void Parse_WithGetErrorCommand_ReturnsGetErrorRequest()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x11, 0x08];
+        var expectedResult = new ParseResult<Request>(new GetErrorRequest(), 0, 2);
+
+        // Act
+        var result = RequestParser.Parse(buffer);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
     public void Parse_WithGetRpmCommand_ReturnsGetRpmRequestAndEndOffset()
     {
         // Arrange
@@ -98,6 +112,34 @@ public class RequestParserTest
         // Arrange
         ReadOnlySpan<byte> buffer = [0x00, 0x11, 0x20];
         var expectedResult = new ParseResult<Request>(new GetRpmRequest(), 1, 2);
+
+        // Act
+        var result = RequestParser.Parse(buffer);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
+    public void Parse_WithSetLightsCommand_ReturnsSetLightsRequest()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x16, 0x1A, 0xF1];
+        var expectedResult = new ParseResult<Request>(new SetLightsRequest(true), 0, 3);
+
+        // Act
+        var result = RequestParser.Parse(buffer);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
+    public void Parse_WithSetMaxRpmCommand_ReturnsSetMaxRpmRequest()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x16, 0x1F, 0x00, 0x20, 0x55];
+        var expectedResult = new ParseResult<Request>(new SetMaxRpmRequest(0x20), 0, 4, 0x55);
 
         // Act
         var result = RequestParser.Parse(buffer);

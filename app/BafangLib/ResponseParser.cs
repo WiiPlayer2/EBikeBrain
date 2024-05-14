@@ -14,6 +14,12 @@ public static class ResponseParser
         ParseUInt8(buffer, offset, length)
             .Map(x => new ParseResult<GetCurrentResponse>(new GetCurrentResponse(x.Value / 2m), x.Offset, x.Length, x.Checksum));
 
+    public static ParseResult<GetErrorResponse>? ParseGetErrorResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
+        length < 1
+            ? null
+            : new ParseResult<GetErrorResponse>(new GetErrorResponse((ErrorCode) buffer[offset]), offset, 1);
+
+    // For some reason the checksum is always greater by 0x20
     public static ParseResult<GetRpmResponse>? ParseGetRpmResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
         ParseUInt16(buffer, offset, length)
             .Map(x => new ParseResult<GetRpmResponse>(
@@ -39,11 +45,6 @@ public static class ResponseParser
 
         return null;
     }
-
-    public static ParseResult<UnknownX1108Response>? ParseUnknownX1108Response(ReadOnlySpan<byte> buffer, int offset, int length) =>
-        length < 1
-            ? null
-            : new ParseResult<UnknownX1108Response>(new UnknownX1108Response(buffer[offset]), offset, 1);
 
     private static ParseResult<ushort>? ParseUInt16(ReadOnlySpan<byte> buffer, int offset, int length) =>
         length < 3

@@ -177,8 +177,8 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                             HandleResponse("GetBattery", () => ResponseParser.ParseGetBatteryResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count));
                             break;
 
-                        case UnknownX1108Request:
-                            HandleResponse("Unknown 0x1108", () => ResponseParser.ParseUnknownX1108Response(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count), false);
+                        case GetErrorRequest:
+                            HandleResponse("GetError", () => ResponseParser.ParseGetErrorResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count), false);
                             break;
 
                         default:

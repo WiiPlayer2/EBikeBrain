@@ -1,3 +1,4 @@
+using BafangLib.Messages;
 using FluentAssertions;
 
 namespace BafangLib.Test;
@@ -10,7 +11,7 @@ public class ResponseParserTest
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x66, 0x66];
-        var expectedResult = new ParseResult<byte>(0x66, 0, 1, 0x66);
+        var expectedResult = new ParseResult<GetBatteryResponse>(new GetBatteryResponse(0x66), 0, 1, 0x66);
 
         // Act
         var result = ResponseParser.ParseGetBatteryResponse(buffer, 0, 2);
@@ -24,10 +25,24 @@ public class ResponseParserTest
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x66, 0x66];
-        var expectedResult = new ParseResult<decimal>(0x66 / 2m, 0, 1, 0x66);
+        var expectedResult = new ParseResult<GetCurrentResponse>(new GetCurrentResponse(0x66 / 2m), 0, 1, 0x66);
 
         // Act
         var result = ResponseParser.ParseGetCurrentResponse(buffer, 0, 2);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [TestMethod]
+    public void ParseGetErrorResponse_WithErrorResponse_ReturnsErrorCode()
+    {
+        // Arrange
+        ReadOnlySpan<byte> buffer = [0x01];
+        var expectedResult = new ParseResult<GetErrorResponse>(new GetErrorResponse(ErrorCode.Ok), 0, 1);
+
+        // Act
+        var result = ResponseParser.ParseGetErrorResponse(buffer, 0, 1);
 
         // Assert
         result.Should().Be(expectedResult);
@@ -38,7 +53,7 @@ public class ResponseParserTest
     {
         // Arrange
         ReadOnlySpan<byte> buffer = [0x01, 0x66, 0x67];
-        var expectedResult = new ParseResult<ushort>(0x0166, 0, 2, 0x67);
+        var expectedResult = new ParseResult<GetRpmResponse>(new GetRpmResponse(0x0166), 0, 2, 0x47);
 
         // Act
         var result = ResponseParser.ParseGetRpmResponse(buffer, 0, 3);
