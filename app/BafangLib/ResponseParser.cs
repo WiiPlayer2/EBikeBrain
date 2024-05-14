@@ -1,19 +1,26 @@
 using System;
+using BafangLib.Messages;
 using BafangLib.Utils;
 
 namespace BafangLib;
 
 public static class ResponseParser
 {
-    public static ParseResult<byte>? ParseGetBatteryResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
-        ParseUInt8(buffer, offset, length);
-
-    public static ParseResult<decimal>? ParseGetCurrentResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
+    public static ParseResult<GetBatteryResponse>? ParseGetBatteryResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
         ParseUInt8(buffer, offset, length)
-            .Map(x => new ParseResult<decimal>(x.Value / 2m, x.Offset, x.Length, x.Checksum));
+            .Map(x => new ParseResult<GetBatteryResponse>(new GetBatteryResponse(x.Value), x.Offset, x.Length, x.Checksum));
 
-    public static ParseResult<ushort>? ParseGetRpmResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
-        ParseUInt16(buffer, offset, length);
+    public static ParseResult<GetCurrentResponse>? ParseGetCurrentResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
+        ParseUInt8(buffer, offset, length)
+            .Map(x => new ParseResult<GetCurrentResponse>(new GetCurrentResponse(x.Value / 2m), x.Offset, x.Length, x.Checksum));
+
+    public static ParseResult<GetRpmResponse>? ParseGetRpmResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
+        ParseUInt16(buffer, offset, length)
+            .Map(x => new ParseResult<GetRpmResponse>(
+                new GetRpmResponse(x.Value),
+                x.Offset,
+                x.Length,
+                x.Checksum.MapS(x => (byte) (x - 0x20))));
 
     public static ParseResult<ReadOnlyMemory<byte>>? ParseUnknownResponse(ReadOnlySpan<byte> buffer, int offset, int length)
     {
@@ -32,6 +39,11 @@ public static class ResponseParser
 
         return null;
     }
+
+    public static ParseResult<UnknownX1108Response>? ParseUnknownX1108Response(ReadOnlySpan<byte> buffer, int offset, int length) =>
+        length < 1
+            ? null
+            : new ParseResult<UnknownX1108Response>(new UnknownX1108Response(buffer[offset]), offset, 1);
 
     private static ParseResult<ushort>? ParseUInt16(ReadOnlySpan<byte> buffer, int offset, int length) =>
         length < 3

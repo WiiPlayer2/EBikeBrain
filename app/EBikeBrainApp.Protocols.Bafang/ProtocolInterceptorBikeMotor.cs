@@ -123,14 +123,8 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
         var parsedMessages = Observable.Create<object>(async (observer, token) =>
             {
-                await using var displayPacketEnumerator = packets
-                    .Where(x => x.isRequest)
-                    .Select(x => x.data)
-                    .ToAsyncEnumerable()
-                    .GetAsyncEnumerator(token);
-                await using var motorPacketEnumerator = packets
-                    .Where(x => !x.isRequest)
-                    .Select(x => x.data)
+                var initRpm = false;
+                await using var packetEnumerator = packets
                     .ToAsyncEnumerable()
                     .GetAsyncEnumerator(token);
 
@@ -139,16 +133,9 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
                 while (!token.IsCancellationRequested)
                 {
-                    while (displayBuffer.Count < RequestParser.MAX_REQUEST_LENGTH)
-                    {
-                        if (!await displayPacketEnumerator.MoveNextAsync())
-                        {
-                            observer.OnCompleted();
+                    while (displayBuffer.Count < RequestParser.MAX_REQUEST_LENGTH * 2)
+                        if (!await ConsumePacket())
                             return;
-                        }
-
-                        displayBuffer.AddRange(displayPacketEnumerator.Current);
-                    }
 
                     var request = RequestParser.Parse(displayBuffer.ToArray());
                     if (request is null)
@@ -165,10 +152,33 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                         continue;
                     }
 
+                    while (motorPacketBuffer.Count < 3 * 2)
+                        if (!await ConsumePacket())
+                            return;
+
                     switch (request.Value)
                     {
                         case SetPasRequest setPasRequest:
                             observer.OnNext(setPasRequest);
+                            break;
+
+                        case GetRpmRequest:
+                            if (initRpm)
+                                HandleResponse("GetRpm", () => ResponseParser.ParseGetRpmResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count));
+                            else
+                                initRpm = true;
+                            break;
+
+                        case GetCurrentRequest:
+                            HandleResponse("GetCurrent", () => ResponseParser.ParseGetCurrentResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count));
+                            break;
+
+                        case GetBatteryRequest:
+                            HandleResponse("GetBattery", () => ResponseParser.ParseGetBatteryResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count));
+                            break;
+
+                        case UnknownX1108Request:
+                            HandleResponse("Unknown 0x1108", () => ResponseParser.ParseUnknownX1108Response(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count), false);
                             break;
 
                         default:
@@ -179,6 +189,50 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     displayBuffer = request.Checksum.HasValue
                         ? displayBuffer[(request.Offset + request.Length + 1)..]
                         : displayBuffer[(request.Offset + request.Length)..];
+
+                    void HandleResponse<T>(string name, Func<ParseResult<T>?> parse, bool check = true)
+                        where T : notnull
+                    {
+                        var response = parse();
+                        if (response is null)
+                        {
+                            logger.LogError($"Failed to parse {name} response");
+                            return;
+                        }
+
+                        if (check)
+                        {
+                            var checksum = Checksum.Calculate(motorPacketBuffer.ToArray(), response.Offset, response.Length);
+                            if (response.Checksum != checksum)
+                                logger.LogError($"Checksum for {name} failed. Expected {{expectedChecksum}}, but got {{actualChecksum}}.", checksum, response.Checksum);
+                            else
+                                observer.OnNext(response.Value);
+                        }
+                        else
+                        {
+                            observer.OnNext(response.Value);
+                        }
+
+                        motorPacketBuffer = response.Checksum.HasValue
+                            ? motorPacketBuffer[(response.Offset + response.Length + 1)..]
+                            : motorPacketBuffer[(response.Offset + response.Length)..];
+                    }
+
+                    async Task<bool> ConsumePacket()
+                    {
+                        if (!await packetEnumerator.MoveNextAsync())
+                        {
+                            observer.OnCompleted();
+                            return false;
+                        }
+
+                        if (packetEnumerator.Current.isRequest)
+                            displayBuffer.AddRange(packetEnumerator.Current.data);
+                        else
+                            motorPacketBuffer.AddRange(packetEnumerator.Current.data);
+
+                        return true;
+                    }
                 }
             })
             .Publish();
@@ -203,18 +257,30 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                 _ => Domain.PasLevel.Unknown, // 0x06
             });
 
+        RotationalSpeed = parsedMessages
+            .OfType<GetRpmResponse>()
+            .Select(x => UnitsNet.RotationalSpeed.FromRevolutionsPerMinute(x.Rpm));
+
+        Battery = parsedMessages
+            .OfType<GetBatteryResponse>()
+            .Select(x => Percentage.From(x.Percentage));
+
+        Current = parsedMessages
+            .OfType<GetCurrentResponse>()
+            .Select(x => ElectricCurrent.FromAmperes(x.Amperes));
+
         connection = new CompositeDisposable(
             parsedMessages.Connect(),
             interceptedLines.Connect());
     }
 
-    public IObservable<Percentage> Battery { get; } = Observable.Never<Percentage>();
+    public IObservable<Percentage> Battery { get; }
 
-    public IObservable<ElectricCurrent> Current { get; } = Observable.Never<ElectricCurrent>();
+    public IObservable<ElectricCurrent> Current { get; }
 
     public IObservable<PasLevel> PasLevel { get; }
 
-    public IObservable<RotationalSpeed> RotationalSpeed { get; } = Observable.Never<RotationalSpeed>();
+    public IObservable<RotationalSpeed> RotationalSpeed { get; }
 
     public ValueTask SetPasLevel(PasLevel level, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 

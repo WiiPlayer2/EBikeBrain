@@ -7,12 +7,16 @@ Notes:
 - All request and response values are hex.
 - Some messages contain a checksum represented as `%%` which is just every preceding byte summed up
 
-| Name       | Request       | Response   | Description                                                            |
-|------------|---------------|------------|------------------------------------------------------------------------|
-| GetRpm     | `11 20`       | `xx xx %%` | ***[uint16]** xx xx*: RPM                                              |
-| SetPas     | `16 0B xx %%` |            | ***[uint8]** xx*: PAS Level, see the [PAS section](#PAS) for more info | 
-| GetCurrent | `11 0A`       | `xx %%`    | ***[uint8]** xx*: requested current in A divided by 2                  |
-| GetBattery | `11 11`       | `xx %%`    | ***[uint8]** xx*: Battery in %                                         |
+| Name       | Request          | Response   | Description                                                            |
+|------------|------------------|------------|------------------------------------------------------------------------|
+| GetRpm     | `11 20`          | `xx xx %%` | ***[uint16]** xx xx*: RPM                                              |
+| SetPas     | `16 0B xx %%`    |            | ***[uint8]** xx*: PAS Level, see the [PAS section](#PAS) for more info | 
+| GetCurrent | `11 0A`          | `xx %%`    | ***[uint8]** xx*: requested current in A divided by 2                  |
+| GetBattery | `11 11`          | `xx %%`    | ***[uint8]** xx*: Battery in %                                         |
+| ?          | `16 1A F0`       |            |                                                                        |
+| ?          | `16 1F 00 BA %%` |            |
+| ?          | `11 08`          | `01`       |                                                                        |
+| ?          | `11 22 %%`       |            |
 
 ### PAS
 

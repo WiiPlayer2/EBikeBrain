@@ -37,6 +37,9 @@ public static class RequestParser
             if (a == 0x11 && b == 0x11)
                 return new ParseResult<Request>(new GetBatteryRequest(), offset, 2);
 
+            if (a == 0x11 && b == 0x08)
+                return new ParseResult<Request>(new UnknownX1108Request(), offset, 2);
+
             offset += 1;
             length -= 1;
         }
