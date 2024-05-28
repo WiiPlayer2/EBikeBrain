@@ -6,6 +6,8 @@ namespace BafangLib;
 
 public static class ResponseParser
 {
+    public const int MAX_RESPONSE_LENGTH = 2;
+
     public static ParseResult<GetBatteryResponse>? ParseGetBatteryResponse(ReadOnlySpan<byte> buffer, int offset, int length) =>
         ParseUInt8(buffer, offset, length)
             .Map(x => new ParseResult<GetBatteryResponse>(new GetBatteryResponse(x.Value), x.Offset, x.Length, x.Checksum));

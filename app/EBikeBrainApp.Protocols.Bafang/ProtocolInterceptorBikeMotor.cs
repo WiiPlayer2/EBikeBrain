@@ -155,7 +155,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                         continue;
                     }
 
-                    while (motorPacketBuffer.Count < 3 * 2)
+                    while (motorPacketBuffer.Count < (ResponseParser.MAX_RESPONSE_LENGTH + 1) * 3)
                         if (!await ConsumePacket())
                             return;
 
