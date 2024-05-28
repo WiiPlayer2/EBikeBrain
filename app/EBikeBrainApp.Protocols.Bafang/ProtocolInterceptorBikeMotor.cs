@@ -159,9 +159,9 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                         continue;
                     }
 
-                    while (motorPacketBuffer.Count < (ResponseParser.MAX_RESPONSE_LENGTH + 1) * 3)
-                        if (!await ConsumePacket())
-                            return;
+                    // while (motorPacketBuffer.Count < (ResponseParser.MAX_RESPONSE_LENGTH + 1))
+                    //     if (!await ConsumePacket())
+                    //         return;
 
                     logger.LogTrace("Handling {request}...", request.Value);
 
@@ -173,20 +173,31 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
                         case GetRpmRequest:
                             if (initRpm)
+                            {
+                                if (!await EnsureBuffer(motorPacketBuffer, GetRpmResponse.LENGTH + 1))
+                                    return;
                                 HandleResponse("GetRpm", ResponseParser.ParseGetRpmResponse);
+                            }
                             else
                                 initRpm = true;
+
                             break;
 
                         case GetCurrentRequest:
+                            if (!await EnsureBuffer(motorPacketBuffer, GetCurrentResponse.LENGTH + 1))
+                                return;
                             HandleResponse("GetCurrent", ResponseParser.ParseGetCurrentResponse);
                             break;
 
                         case GetBatteryRequest:
+                            if (!await EnsureBuffer(motorPacketBuffer, GetBatteryResponse.LENGTH + 1))
+                                return;
                             HandleResponse("GetBattery", ResponseParser.ParseGetBatteryResponse);
                             break;
 
                         case GetErrorRequest:
+                            if (!await EnsureBuffer(motorPacketBuffer, GetErrorResponse.LENGTH))
+                                return;
                             HandleResponse("GetError", ResponseParser.ParseGetErrorResponse, false);
                             break;
 
@@ -261,6 +272,16 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                         motorPacketBuffer = response.Checksum.HasValue
                             ? motorPacketBuffer[(response.Offset + response.Length + 1)..]
                             : motorPacketBuffer[(response.Offset + response.Length)..];
+                    }
+
+                    async Task<bool> EnsureBuffer(List<byte> buffer, int count)
+                    {
+                        // HACK just adding a few more bytes in case of misaligned responses
+                        while (buffer.Count < count + ResponseParser.MAX_RESPONSE_LENGTH)
+                            if (!await ConsumePacket())
+                                return false;
+
+                        return true;
                     }
 
                     async Task<bool> ConsumePacket()
