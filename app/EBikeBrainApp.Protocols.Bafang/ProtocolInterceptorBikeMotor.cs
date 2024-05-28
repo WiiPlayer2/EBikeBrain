@@ -134,17 +134,20 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
                 while (!token.IsCancellationRequested)
                 {
-                    while (displayBuffer.Count < RequestParser.MAX_REQUEST_LENGTH * 2)
+                    while (displayBuffer.Count < RequestParser.MIN_REQUEST_LENGTH)
                         if (!await ConsumePacket())
                             return;
 
                     var request = RequestParser.Parse(displayBuffer.ToArray());
                     if (request is null)
                     {
-                        logger.LogError("Did not find command in: {data}", string.Join(" ", displayBuffer.Select(x => x.ToString("X2"))));
-                        return;
+                        // logger.LogError("Did not find command in: {data}", string.Join(" ", displayBuffer.Select(x => x.ToString("X2"))));
+                        // return;
+                        //
+                        // displayBuffer.RemoveAt(0);
 
-                        displayBuffer.RemoveAt(0);
+                        logger.LogTrace("Did not find command. Consuming more data...");
+                        await ConsumePacket();
                         continue;
                     }
 
