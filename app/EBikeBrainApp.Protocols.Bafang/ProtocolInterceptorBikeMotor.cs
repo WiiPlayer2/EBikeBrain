@@ -27,7 +27,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                 var buffer = new char[16];
 
                 var text = string.Empty;
-                logger.LogTrace("Starting protocol interception...");
+                logger.LogDebug("Starting protocol interception...");
                 while (!token.IsCancellationRequested)
                 {
                     var readCount = await reader.ReadBlockAsync(buffer, token);
@@ -46,7 +46,8 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                 }
             })
             .Do(line => { logger.LogTrace("{{{{{line}}}}}", line); })
-            .Publish();
+            .Publish()
+            .RefCount();
 
         var packets = interceptedLines
             .Select(line =>
@@ -81,13 +82,12 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     .ToArray();
             })
             .Where(x => x.isRequest.HasValue)
-            .Select(t => (isRequest: t.isRequest!.Value, data: t.data!))
-            .SkipWhile(t => !t.isRequest);
+            .Select(t => (isRequest: t.isRequest!.Value, data: t.data!));
 
-        var messages = packets
-            .Buffer(2)
-            .Where(x => x.Count >= 2)
-            .Select(l => (Request: l[0].data, Response: l[1].data));
+        // var messages = packets
+        //     .Buffer(2)
+        //     .Where(x => x.Count >= 2)
+        //     .Select(l => (Request: l[0].data, Response: l[1].data));
 
         // RotationalSpeed = messages
         //     .Where(t => IsRequest(t.Request, 0x11, 0x20))
@@ -140,6 +140,9 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     var request = RequestParser.Parse(displayBuffer.ToArray());
                     if (request is null)
                     {
+                        logger.LogError("Did not find command in: {data}", string.Join(" ", displayBuffer.Select(x => x.ToString("X2"))));
+                        return;
+
                         displayBuffer.RemoveAt(0);
                         continue;
                     }
@@ -155,6 +158,8 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     while (motorPacketBuffer.Count < 3 * 2)
                         if (!await ConsumePacket())
                             return;
+
+                    logger.LogDebug("Handling {request}...", request.Value);
 
                     switch (request.Value)
                     {
@@ -251,6 +256,9 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                     }
                 }
             })
+            .Do(
+                o => { },
+                e => logger.LogError(e, "Error while parsing packets."))
             .Publish();
 
         PasLevel = parsedMessages
@@ -292,7 +300,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
         connection = new CompositeDisposable(
             parsedMessages.Connect(),
-            interceptedLines.Connect(),
+            // interceptedLines.Connect(),
             errorLogging);
     }
 
