@@ -159,7 +159,7 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                         if (!await ConsumePacket())
                             return;
 
-                    logger.LogDebug("Handling {request}...", request.Value);
+                    logger.LogTrace("Handling {request}...", request.Value);
 
                     switch (request.Value)
                     {
@@ -251,6 +251,8 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                         {
                             observer.OnNext(response.Value);
                         }
+
+                        if (response.Offset != 0) logger.LogWarning("Discarding response data: {data}", string.Join(" ", motorPacketBuffer.Take(response.Offset).Select(x => x.ToString("X2"))));
 
                         motorPacketBuffer = response.Checksum.HasValue
                             ? motorPacketBuffer[(response.Offset + response.Length + 1)..]
