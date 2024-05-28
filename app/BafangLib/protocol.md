@@ -15,7 +15,7 @@ Notes:
 | GetBattery | `11 11`          | `xx %%`    | ***[uint8]** xx*: Battery in %                                         |                                                                                                 |
 | SetLights? | `16 1A xx`       |            | ***[uint8]** xx*: `F0` - off; `F1` - on                                |                                                                                                 |
 | SetMaxRpm? | `16 1F xx xx %%` |            | ***[uint16]** xx xx*: RPM                                              |                                                                                                 |
-| GetError?  | `11 08`          | `01`       | ***[uint8]** xx*: `01` - OK                                            |                                                                                                 |
+| GetError?  | `11 08`          | `01`       | ***[uint8]** xx*: `01` - OK, `03` - Breaking                           |                                                                                                 |
 | ?          | `11 22 %%`       |            |                                                                        |                                                                                                 |
 | ?          | `11 F0`          |            |                                                                        |                                                                                                 |
 
