@@ -39,7 +39,8 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                         var line = text[..newLineIndex];
 
                         // HACK: idk why but apparently this sometimes locks up on android if run synchronously (even if awaited)
-                        Task.Run(() => observer.OnNext(line.Trim()), token);
+                        // Task.Run(() => observer.OnNext(line.Trim()), token);
+                        observer.OnNext(line.Trim());
 
                         text = text[(newLineIndex + 1)..];
                     }
