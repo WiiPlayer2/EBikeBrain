@@ -169,21 +169,21 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
                         case GetRpmRequest:
                             if (initRpm)
-                                HandleResponse("GetRpm", () => ResponseParser.ParseGetRpmResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count));
+                                HandleResponse("GetRpm", ResponseParser.ParseGetRpmResponse);
                             else
                                 initRpm = true;
                             break;
 
                         case GetCurrentRequest:
-                            HandleResponse("GetCurrent", () => ResponseParser.ParseGetCurrentResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count));
+                            HandleResponse("GetCurrent", ResponseParser.ParseGetCurrentResponse);
                             break;
 
                         case GetBatteryRequest:
-                            HandleResponse("GetBattery", () => ResponseParser.ParseGetBatteryResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count));
+                            HandleResponse("GetBattery", ResponseParser.ParseGetBatteryResponse);
                             break;
 
                         case GetErrorRequest:
-                            HandleResponse("GetError", () => ResponseParser.ParseGetErrorResponse(motorPacketBuffer.ToArray(), 0, motorPacketBuffer.Count), false);
+                            HandleResponse("GetError", ResponseParser.ParseGetErrorResponse, false);
                             break;
 
                         case SetMaxRpmRequest setMaxRpmRequest:
@@ -211,10 +211,28 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
                         ? displayBuffer[(request.Offset + request.Length + 1)..]
                         : displayBuffer[(request.Offset + request.Length)..];
 
-                    void HandleResponse<T>(string name, Func<ParseResult<T>?> parse, bool check = true)
+                    ParseResult<T>? TryFindResponse<T>(ParseResponseDelegate<T> parse)
+                    {
+                        var buffer = motorPacketBuffer.ToArray();
+                        for (var i = 0; i < buffer.Length; i++)
+                        {
+                            var response = parse(buffer, i, buffer.Length - i);
+
+                            if (response?.Checksum == null)
+                                return response;
+
+                            var checksum = Checksum.Calculate(buffer, i, response.Length);
+                            if (checksum == response.Checksum)
+                                return response;
+                        }
+
+                        return default;
+                    }
+
+                    void HandleResponse<T>(string name, ParseResponseDelegate<T> parse, bool check = true)
                         where T : notnull
                     {
-                        var response = parse();
+                        var response = TryFindResponse(parse);
                         if (response is null)
                         {
                             logger.LogError($"Failed to parse {name} response");
@@ -321,4 +339,6 @@ public class ProtocolInterceptorBikeMotor : IBikeMotor, IDisposable
 
     private static bool IsRequest(byte[] request, params byte[] expectedRequest) =>
         request.Length >= expectedRequest.Length && request.Take(expectedRequest.Length).Zip(expectedRequest).All(t => t.Item1 == t.Item2);
+
+    private delegate ParseResult<T>? ParseResponseDelegate<T>(ReadOnlySpan<byte> buffer, int offset, int length);
 }
