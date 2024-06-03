@@ -1,22 +1,26 @@
 using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using EBikeBrainApp.Avalonia.XPlat.ViewModels.Cards;
-using EBikeBrainApp.Avalonia.XPlat.Views.Cards;
 
 namespace EBikeBrainApp.Avalonia.XPlat.DataTemplates;
 
 public static class CardTemplateProvider
 {
-    public static FuncDataTemplate<CardViewModel> CardDataTemplate { get; } = new(BuildCard);
+    private static readonly Dictionary<Type, Func<Control>> cardCreators = new();
 
-    private static Control? BuildCard(CardViewModel vm, INameScope nameScope) =>
-        vm switch
-        {
-            ConnectCardViewModel => new ConnectCard(),
-            LogCardViewModel => new LogCard(),
-            SpeedCardViewModel => new SpeedCard(),
-            ClockCardViewModel => new ClockCard(),
-            _ => default,
-        };
+    public static FuncDataTemplate<CardViewModel?> CardDataTemplate { get; } = new(BuildCard);
+
+    public static void AddCard<TCardView, TCardViewModel>()
+        where TCardView : Control, new()
+        where TCardViewModel : CardViewModel
+        => cardCreators.Add(typeof(TCardViewModel), () => new TCardView());
+
+    private static Control? BuildCard(CardViewModel? vm, INameScope nameScope) =>
+        vm is null
+            ? default
+            : cardCreators.TryGetValue(vm.GetType(), out var createCard)
+                ? createCard()
+                : default;
 }
