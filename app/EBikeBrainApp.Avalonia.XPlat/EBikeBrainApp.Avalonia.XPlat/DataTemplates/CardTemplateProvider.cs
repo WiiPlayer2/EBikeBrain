@@ -16,6 +16,7 @@ public static class CardTemplateProvider
             ConnectCardViewModel => new ConnectCard(),
             LogCardViewModel => new LogCard(),
             SpeedCardViewModel => new SpeedCard(),
+            ClockCardViewModel => new ClockCard(),
             _ => default,
         };
 }

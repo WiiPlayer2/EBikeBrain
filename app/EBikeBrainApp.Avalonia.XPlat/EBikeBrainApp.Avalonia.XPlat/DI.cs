@@ -19,8 +19,11 @@ internal static class DI
         services.AddSingleton<ConnectCardViewModel>();
         services.AddSingleton<LogCardViewModel>();
         services.AddSingleton<SpeedCardViewModel>();
+        services.AddSingleton<ClockCardViewModel>();
 
         services.AddSingleton<IMainThreadDispatcher, AvaloniaMainThreadDispatcher>();
+
+        services.AddSingleton<IClock, Clock>();
     }
 
     public static void AddPlatformSpecificServices(this IServiceCollection services) =>

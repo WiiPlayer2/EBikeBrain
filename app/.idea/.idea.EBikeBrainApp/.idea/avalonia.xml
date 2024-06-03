@@ -5,6 +5,7 @@
       <map>
         <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/App.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
         <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/Card.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
+        <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/ClockCard.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
         <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/ConnectCard.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
         <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/LogCard.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />
         <entry key="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat/Views/Cards/SpeedCard.axaml" value="EBikeBrainApp.Avalonia.XPlat/EBikeBrainApp.Avalonia.XPlat.Desktop/EBikeBrainApp.Avalonia.XPlat.Desktop.csproj" />

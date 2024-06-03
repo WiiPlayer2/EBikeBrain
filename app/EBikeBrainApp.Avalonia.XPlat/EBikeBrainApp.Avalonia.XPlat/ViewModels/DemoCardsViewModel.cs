@@ -7,7 +7,8 @@ namespace EBikeBrainApp.Avalonia.XPlat.ViewModels;
 public class DemoCardsViewModel(
     SpeedCardViewModel speedCardViewModel,
     ConnectCardViewModel connectCardViewModel,
-    LogCardViewModel logCardViewModel)
+    LogCardViewModel logCardViewModel,
+    ClockCardViewModel clockCardViewModel)
 {
     public IReadOnlyList<CardViewModel?> Cards { get; } =
     [
@@ -30,7 +31,7 @@ public class DemoCardsViewModel(
         null,
         null,
         null,
-        null,
+        clockCardViewModel,
         logCardViewModel,
         null,
         null,
