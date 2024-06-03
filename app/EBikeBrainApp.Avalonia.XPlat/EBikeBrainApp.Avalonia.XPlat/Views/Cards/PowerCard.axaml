@@ -1,0 +1,20 @@
+<v:Card xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:EBikeBrainApp.Avalonia.XPlat.ViewModels.Cards"
+        xmlns:v="clr-namespace:EBikeBrainApp.Avalonia.XPlat.Views.Cards"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="EBikeBrainApp.Avalonia.XPlat.Views.Cards.PowerCard"
+        x:DataType="vm:PowerCardViewModel">
+    <Grid RowDefinitions="*,Auto">
+        <Viewbox Grid.Row="0">
+            <TextBlock Text="{Binding Value^}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+        </Viewbox>
+        <TextBlock Grid.Row="1"
+                   Text="W"
+                   HorizontalAlignment="Center" />
+    </Grid>
+</v:Card>

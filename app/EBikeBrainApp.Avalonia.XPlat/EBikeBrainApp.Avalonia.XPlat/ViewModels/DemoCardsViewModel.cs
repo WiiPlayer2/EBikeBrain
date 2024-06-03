@@ -9,7 +9,9 @@ public class DemoCardsViewModel(
     ConnectCardViewModel connectCardViewModel,
     LogCardViewModel logCardViewModel,
     ClockCardViewModel clockCardViewModel,
-    BatteryCardViewModel batteryCardViewModel)
+    BatteryCardViewModel batteryCardViewModel,
+    PasCardViewModel pasCardViewModel,
+    PowerCardViewModel powerCardViewModel)
 {
     public IReadOnlyList<CardViewModel?> Cards { get; } =
     [
@@ -30,8 +32,8 @@ public class DemoCardsViewModel(
         null,
         null,
         batteryCardViewModel,
-        null,
-        null,
+        pasCardViewModel,
+        powerCardViewModel,
         clockCardViewModel,
         logCardViewModel,
         null,

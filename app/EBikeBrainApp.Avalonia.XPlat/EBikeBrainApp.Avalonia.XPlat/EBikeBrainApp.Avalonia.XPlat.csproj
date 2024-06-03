@@ -28,4 +28,15 @@
         <ProjectReference Include="..\..\EBikeBrainApp.Implementations.Demo\EBikeBrainApp.Implementations.Demo.csproj"/>
         <ProjectReference Include="..\..\EBikeBrainApp.Implementations.EventLogging\EBikeBrainApp.Implementations.EventLogging.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Views\Cards\PasCard.axaml.cs">
+            <DependentUpon>PasCard.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Cards\PowerCard.axaml.cs">
+            <DependentUpon>PowerCard.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
 </Project>
