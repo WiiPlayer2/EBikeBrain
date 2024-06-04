@@ -15,7 +15,7 @@ public class DemoCardsViewModel(
 {
     public IReadOnlyList<CardViewModel?> Cards { get; } =
     [
-        speedCardViewModel.With(0, 0, 1, 1),
+        speedCardViewModel.With(0, 0, 4, 2),
         batteryCardViewModel.With(0, 4, 1, 1),
         pasCardViewModel.With(1, 4, 1, 1),
         powerCardViewModel.With(2, 4, 1, 1),
