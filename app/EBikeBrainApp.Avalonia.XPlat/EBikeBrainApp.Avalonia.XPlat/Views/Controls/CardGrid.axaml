@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:EBikeBrainApp.Avalonia.XPlat.ViewModels.Cards"
              xmlns:templates="clr-namespace:EBikeBrainApp.Avalonia.XPlat.DataTemplates"
              xmlns:controls="clr-namespace:EBikeBrainApp.Avalonia.XPlat.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -10,8 +11,16 @@
                   ItemsSource="{Binding $parent[controls:CardGrid].Cards}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid Columns="4" Rows="6" />
+                <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,*,*,*,*,*" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
+        <ItemsControl.Styles>
+            <Style x:DataType="vm:CardViewModel" Selector="ItemsControl > ContentPresenter">
+                <Setter Property="Grid.Column" Value="{Binding X}" />
+                <Setter Property="Grid.Row" Value="{Binding Y}" />
+                <Setter Property="Grid.ColumnSpan" Value="{Binding Width}" />
+                <Setter Property="Grid.RowSpan" Value="{Binding Height}" />
+            </Style>
+        </ItemsControl.Styles>
     </ItemsControl>
 </UserControl>

@@ -5,8 +5,6 @@ using EBikeBrainApp.Domain.Events;
 
 namespace EBikeBrainApp.Avalonia.XPlat.ViewModels.Cards;
 
-public abstract class CardViewModel;
-
 public class SpeedCardViewModel(IEventStream<BikeSpeed> stream) : CardViewModel
 {
     public IObservable<string> Value { get; } = stream
