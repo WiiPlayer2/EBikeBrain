@@ -17,7 +17,7 @@ public class DemoBikeMotorConnector(ILogger<ProtocolInterceptorBikeMotor> logger
 
         // throw new Exception();
 
-        var stream = typeof(DemoBikeMotorConnector).Assembly.GetManifestResourceStream("EBikeBrainApp.Implementations.Demo.demo.log") ?? throw new InvalidOperationException();
+        var stream = typeof(DemoBikeMotorConnector).Assembly.GetManifestResourceStream("EBikeBrainApp.Implementations.Demo.serial_20240511_153506.txt") ?? throw new InvalidOperationException();
         return new ProtocolInterceptorBikeMotor(new SlowStream(stream, 1.Milliseconds()), logger);
     }
 

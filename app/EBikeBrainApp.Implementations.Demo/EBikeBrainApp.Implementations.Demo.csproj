@@ -21,6 +21,8 @@
     <ItemGroup>
         <None Remove="demo.log"/>
         <EmbeddedResource Include="demo.log"/>
+        <None Remove="serial_20240511_153506.txt"/>
+        <EmbeddedResource Include="serial_20240511_153506.txt"/>
     </ItemGroup>
 
 </Project>

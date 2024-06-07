@@ -26,6 +26,7 @@ internal static class DI
         services.AddCard<BatteryCard, BatteryCardViewModel>();
         services.AddCard<PasCard, PasCardViewModel>();
         services.AddCard<PowerCard, PowerCardViewModel>();
+        services.AddCard<DistanceCard, DistanceCardViewModel>();
 
         services.AddSingleton<IMainThreadDispatcher, AvaloniaMainThreadDispatcher>();
 

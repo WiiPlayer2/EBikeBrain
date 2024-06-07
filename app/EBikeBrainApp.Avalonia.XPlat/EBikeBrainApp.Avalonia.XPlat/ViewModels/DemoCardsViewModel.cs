@@ -11,11 +11,13 @@ public class DemoCardsViewModel(
     ClockCardViewModel clockCardViewModel,
     BatteryCardViewModel batteryCardViewModel,
     PasCardViewModel pasCardViewModel,
-    PowerCardViewModel powerCardViewModel)
+    PowerCardViewModel powerCardViewModel,
+    DistanceCardViewModel distanceCardViewModel)
 {
     public IReadOnlyList<CardViewModel?> Cards { get; } =
     [
         speedCardViewModel.With(0, 0, 4, 2),
+        distanceCardViewModel.With(0, 2, 2, 1),
         batteryCardViewModel.With(0, 4, 1, 1),
         pasCardViewModel.With(1, 4, 1, 1),
         powerCardViewModel.With(2, 4, 1, 1),

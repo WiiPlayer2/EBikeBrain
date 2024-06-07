@@ -29,6 +29,7 @@ public static class DI
         services.AddEventBusInitializer<BikeMotorCalculations>();
         services.AddEventBusInitializer<EventTraceLogging>();
         services.AddEventBusInitializer<ClockService>();
+        services.AddEventBusInitializer<BikeDistances>();
     }
 
     public static void AddEventBusInitializer<TInitializer>(this IServiceCollection services)

@@ -19,3 +19,6 @@ public partial record BikeMotorPasLevel;
 
 [ValueObject<Power>]
 public partial record BikeMotorPower;
+
+[ValueObject<Length>]
+public partial record BikeDistanceCycled;
